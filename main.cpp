@@ -7,7 +7,7 @@
 #include <functional>
 #include <chrono>
 #include "betree.h"
-
+#include "dual_betree.cpp"
 using namespace std; 
 
 int main(int argc, char **argv)
@@ -32,7 +32,15 @@ int main(int argc, char **argv)
 
     data.resize(filesize / sizeof(int));
     ifs.read((char *)data.data(), filesize);
-    
 
+    // Loop through data and turn each elements into pair type
+    std::vector<std::pair<int,int>> kvs;
+    for(int i : data){
+        pair<int, int> inner_pair;
+        inner_pair.first = data[i];
+        inner_pair.second = data[i];
+        kvs.push_back(inner_pair);
+    }
+    DualBeTree(kvs,1);
     return 1; 
 }
