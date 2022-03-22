@@ -14,8 +14,7 @@ void DualBeTree<_Key, _Value>::build() {
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
-   int max;
-   
+
 }
 
 template <typename _Key, typename _Value>
