@@ -33,4 +33,4 @@ public:
      */
     _Value query(_Key key); // TODO: what is the return type: bool or _Value?
 
-}
+};
