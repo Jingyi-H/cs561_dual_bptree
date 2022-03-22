@@ -41,6 +41,56 @@ int main(int argc, char **argv)
         inner_pair.second = data[i];
         kvs.push_back(inner_pair);
     }
-    DualBeTree(kvs,1);
+    DualBeTree dualbtree(kvs,1);
+
+    // genetate point query
+    std::vector<int> generatePointQueries(std::vector<int> data, int n)
+    {
+        std::vector<int> queries(data.begin(), data.end());
+
+        // add a few elements out of range
+        int non_existing_counter = (data.size() * 0.1);
+        std::uniform_int_distribution<int> dist{n, (int)(1.8 * n)};
+        // Initialize the random_device
+        std::random_device rd;
+        // Seed the engine
+        std::mt19937_64 generator(rd());
+        std::set<int> non_existing;
+        while (non_existing.size() != non_existing_counter)
+        {
+            non_existing.insert(dist(generator));
+        }
+
+        queries.insert(queries.end(), non_existing.begin(), non_existing.end());
+
+        // shuffle indexes
+        std::random_shuffle(queries.begin(), queries.end());
+
+        return queries;
+    }
+    std::vector<int> queries = generatePointQueries(data, data.size());
+
+    auto start = std::chrono::high_resolution_clock::now();
+    // query from dualbtree
+    int yes = 0;
+    int no = 0;
+
+    for (int i = 0; i < queries.size(); i++){
+    if(dualbtree.query(queries[i])){
+        yes++;
+    }
+    else {
+        no++;
+    }
+    }
+    std::cout << "found:" << yes << endl;
+    std::cout << "notfound:" << no << endl;
+    
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    unsigned long long point_query_time = duration.count();
+    std::cout << "Time taken to perform point queries from zonemap = " << point_query_time << " microseconds" << endl;
+
+
     return 1; 
 }
