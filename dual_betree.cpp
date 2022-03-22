@@ -14,7 +14,14 @@ void DualBeTree<_Key, _Value>::build() {
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
-
+    for (auto& pair : _key_value_pairs) {
+        if (pair.first < this->buffer_elements) {
+            this->unsorted.insert(pair.first, pair.second);
+        } else {
+            this->sorted.insert(pair.first, pair.second);
+        }
+        buffer_elements = pair.first;
+    }
 }
 
 template <typename _Key, typename _Value>
