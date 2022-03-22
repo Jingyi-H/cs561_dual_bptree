@@ -14,13 +14,19 @@ void DualBeTree<_Key, _Value>::build() {
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
-    
 
 }
 
 template <typename _Key, typename _Value>
-_Value DualBeTree<_Key, _Value>::query(_Key key) {
+bool DualBeTree<_Key, _Value>::query(_Key key) {
     // point query
+
+    return false;
+}
+
+template <typename _Key, typename _Value>
+std::vector<std::pair<_Key, _Value>> rangeQuery(_Key low, _Key high, BeTraits &traits) {
+    // range query
 
     return nullptr;
 }
