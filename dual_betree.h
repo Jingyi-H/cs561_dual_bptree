@@ -9,6 +9,7 @@ class DualBeTree
     BeTree<_Key, _Value> sorted;
     BeTree<_Key, _Value> unsorted;
     uint buffer_size;                        // set to 1 for current version
+    _Key buffer_elements;
     // std::vector<_Key> buffer_elements;   // TODO: inserted by key or value?
 
 public:
@@ -27,10 +28,16 @@ public:
     void build();
 
    /**
-     * Purpose: Query a key using the zonemap 
+     * Purpose: Query a key using the dual bplus tree 
      * Param: Key to be queried  
      * returns: True if element is found, else returns false 
      */
-    _Value query(_Key key); // TODO: what is the return type: bool or _Value?
+    bool query(_Key key); // TODO: what is the return type: bool or _Value?
 
-};
+     /**
+     * Purpose: Query a range of key using the dual bplus tree 
+     * Param: range to be queried  
+     * returns: vector of keys within the range
+     */
+    std::vector<std::pair<key_type, value_type>> rangeQuery(key_type low, key_type high, BeTraits &traits);
+}
