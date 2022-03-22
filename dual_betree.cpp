@@ -17,8 +17,15 @@ void DualBeTree<_Key, _Value>::build() {
 }
 
 template <typename _Key, typename _Value>
-_Value DualBeTree<_Key, _Value>::query(_Key key) {
+bool DualBeTree<_Key, _Value>::query(_Key key) {
     // point query
 
+    return false;
+}
+
+template <typename _Key, typename _Value>
+std::vector<std::pair<key_type, value_type>> rangeQuery(key_type low, key_type high, BeTraits &traits) {
+    // range query
+    
     return nullptr;
 }
