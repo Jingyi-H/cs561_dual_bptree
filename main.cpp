@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 
     // Instantiate dual bplus tree
     DualBeTree<int,int> dualbptree;
+  
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
         dualbptree.insert(i,i);    
