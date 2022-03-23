@@ -76,12 +76,12 @@ int main(int argc, char **argv)
     int no = 0;
 
     for (int i = 0; i < queries.size(); i++){
-    if(dualbtree.query(queries[i])){
-        yes++;
-    }
-    else {
-        no++;
-    }
+        if(dualbtree.query(queries[i])){
+            yes++;
+        }
+        else {
+            no++;
+        }
     }
     std::cout << "found:" << yes << endl;
     std::cout << "notfound:" << no << endl;
