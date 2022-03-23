@@ -1,5 +1,4 @@
 #include "dual_betree.h"
-#include "betree.h"
 
 template <typename _Key, typename _Value>
 DualBeTree<_Key, _Value>::DualBeTree(std::vector<std::pair<_Key, _Value>> _key_value_pairs, uint _buffer_size)
@@ -24,8 +23,8 @@ void DualBeTree<_Key, _Value>::build() {
             this->unsorted.insert(pair.first, pair.second);
         } else {
             this->sorted.insert(pair.first, pair.second);
+            this->buffer_elements = pair.first;
         }
-        this->buffer_elements = pair.first;
     }
 }
 
