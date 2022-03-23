@@ -1913,6 +1913,154 @@ public:
         return true;
     }
 
+    // template <typename Iterator>
+    bool insert_to_tail_leaf(key_type key, value_type value) 
+    {
+         // first create leaf node
+        uint new_leaf_id = manager->allocate();
+        BeNode<key_type, value_type, knobs, compare> *leaf = new BeNode<key_type, value_type, knobs, compare>(manager, new_leaf_id);
+        leaf->setLeaf(true);
+
+        // add all elements to leaf.
+        // size_t num_items = iend - ibegin;
+        // Iterator it = ibegin;
+        // for (size_t s = 0; s < num_items + 1; ++s, ++it)
+        // {
+        pair<int, int> p;
+        p.first = key;
+        p.second = value;
+        leaf->insertInLeaf(p);
+        // }
+
+        // now add to tree
+
+        // case 1: tail leaf is null -> meaning tree is empty
+        if (tail_leaf == nullptr)
+        {
+            root = leaf;
+            root->setRoot(true);
+            head_leaf = leaf;
+            head_leaf_id = leaf->getId();
+            // newly added leaf is always tail
+            tail_leaf = leaf;
+            tail_leaf_id = leaf->getId();
+
+            min_key = key;
+            max_key = key;
+        }
+
+        else
+        {
+            // if tree is not empty, we are only going to add rightwards
+            // so we only need to update max key
+            max_key = key;
+
+            // case 2: tail leaf is not null, but root and tail leaf are the same, i.e. root is a leaf
+            // this means that there is only one node in tree
+            if (root->isLeaf())
+            {
+                key_type split_key_new = root->getDataPairKey(root->getDataSize() - 1);
+
+                // create new root
+                uint new_root_id = manager->allocate();
+                BeNode<key_type, value_type, knobs, compare> *new_root = new BeNode<key_type, value_type, knobs, compare>(manager, new_root_id);
+                new_root->setRoot(true);
+
+                // set child keys and pivots
+                new_root->setChildKey(split_key_new, 0);
+                new_root->setPivot(root->getId(), 0);
+                new_root->setPivot(leaf->getId(), 1);
+                new_root->setPivotCounter(new_root->getPivotsCtr() + 2);
+                manager->addDirtyNode(new_root_id);
+
+                // change old root
+                root->setRoot(false);
+                root->setNextNode(leaf->getId());
+
+                // set parents
+                leaf->setParent(new_root_id);
+                root->setParent(new_root_id);
+
+                manager->addDirtyNode(leaf->getId());
+                manager->addDirtyNode(root->getId());
+
+                root = new_root;
+                // newly added leaf is always tail
+                tail_leaf = leaf;
+                tail_leaf_id = leaf->getId();
+            }
+            else
+            {
+                // case 3: tree exists and we just need to add the leaf
+                // here we can have two possibilities: add and done, or we need to split internal nodes/root
+
+                key_type split_key = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
+                uint new_node_id = leaf->getId();
+                leaf->setParent(tail_leaf->getParent());
+                tail_leaf->setNextNode(leaf->getId());
+
+                manager->addDirtyNode(leaf->getId());
+                manager->addDirtyNode(tail_leaf->getId());
+
+                // newly added leaf is always tail
+                tail_leaf = leaf;
+                tail_leaf_id = leaf->getId();
+
+                BeNode<key_type, value_type, knobs, compare> new_node(manager, leaf->getId());
+                while (true)
+                {
+                    BeNode<key_type, value_type, knobs, compare> child_parent(manager, new_node.getParent());
+                    bool flag = child_parent.addPivot(split_key, new_node_id);
+                    manager->addDirtyNode(child_parent.getId());
+                    if (!flag)
+                    {
+                        break;
+                    }
+
+                    if (child_parent.isRoot())
+                    {
+                        // split root
+                        child_parent.splitInternal(split_key, traits, new_node_id);
+                        BeNode<key_type, value_type, knobs, compare> new_sibling(manager, new_node_id);
+                        manager->addDirtyNode(new_node_id);
+                        traits.internal_splits++;
+
+                        // create new root
+                        uint new_root_id = manager->allocate();
+                        BeNode<key_type, value_type, knobs, compare> *new_root = new BeNode<key_type, value_type, knobs, compare>(manager, new_root_id);
+                        new_root->setRoot(true);
+                        manager->addDirtyNode(new_root_id);
+
+                        new_root->setChildKey(split_key, 0);
+                        new_root->setPivot(child_parent.getId(), 0);
+                        new_root->setPivot(new_sibling.getId(), 1);
+                        new_root->setPivotCounter(new_root->getPivotsCtr() + 2);
+
+                        child_parent.setRoot(false);
+                        child_parent.setParent(new_root->getId());
+                        manager->addDirtyNode(child_parent.getId());
+
+                        new_sibling.setParent(new_root->getId());
+                        manager->addDirtyNode(new_sibling.getId());
+
+                        root = new_root;
+                        break;
+                    }
+                    // if flag returned true but child parent is not root
+                    // split internal node and check for propagating splits upwards
+
+                    child_parent.splitInternal(split_key, traits, new_node_id);
+                    traits.internal_splits++;
+                    manager->addDirtyNode(child_parent.getId());
+                    new_node.setToId(new_node_id);
+                    manager->addDirtyNode(new_node_id);
+                }
+            }
+        }
+
+        return true;
+    }
+
     template <typename Iterator>
     bool bulkload_leaf(Iterator ibegin, Iterator iend)
     {
