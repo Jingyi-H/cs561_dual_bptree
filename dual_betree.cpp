@@ -19,11 +19,11 @@ void DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
-    if (pair.first < this->buffer_elements) {
-        this->unsorted.insert(pair.first, pair.second);
+    if (key < this->last_element) {
+        this->unsorted.insert(key, value);
     } else {
-        this->sorted.insert(pair.first, pair.second);
-        this->last_element = pair.first;
+        this->sorted.insert_to_tail_leaf(key, value);
+        this->last_element = key;
     }
 }
 //  bulkload_leaf

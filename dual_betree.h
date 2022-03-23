@@ -17,7 +17,7 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree(std::vector<std::pair<_Key, _Value>> _key_value_pairs, uint _buffer_size);
+    DualBeTree();
 
     /**
     * Purpose: insert key value pair to dual bplus tree
