@@ -1926,7 +1926,7 @@ public:
         // Iterator it = ibegin;
         // for (size_t s = 0; s < num_items + 1; ++s, ++it)
         // {
-        pair<int, int> p;
+        pair<key_type, value_type> p;
         p.first = key;
         p.second = value;
         leaf->insertInLeaf(p);
