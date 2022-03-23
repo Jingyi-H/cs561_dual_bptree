@@ -7,6 +7,7 @@
 #include <functional>
 #include <chrono>
 #include "betree.h"
+#include "dual_betree.h"
 #include "dual_betree.cpp"
 using namespace std; 
 
@@ -77,12 +78,12 @@ int main(int argc, char **argv)
     int no = 0;
 
     for (int i = 0; i < queries.size(); i++){
-    if(dualbtree.query(queries[i])){
-        yes++;
-    }
-    else {
-        no++;
-    }
+        if(dualbtree.query(queries[i])){
+            yes++;
+        }
+        else {
+            no++;
+        }
     }
     std::cout << "found:" << yes << endl;
     std::cout << "notfound:" << no << endl;

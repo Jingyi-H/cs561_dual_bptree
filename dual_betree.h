@@ -5,12 +5,9 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
-    std::vector<std::pair<_Key, _Value>> key_value_pairs;
     BeTree<_Key, _Value> sorted;
     BeTree<_Key, _Value> unsorted;
-    uint buffer_size;                        // set to 1 for current version
-    _Key buffer_elements;
-    // std::vector<_Key> buffer_elements;   // TODO: inserted by key or value?
+    _Key last_element;
 
 public:
     /**
@@ -21,11 +18,11 @@ public:
     DualBeTree(std::vector<std::pair<_Key, _Value>> _key_value_pairs, uint _buffer_size);
 
     /**
-    * Purpose: builds the dual bplus tree given kv pairs
-    * Param: N/A
+    * Purpose: insert key value pair to dual bplus tree
+    * Param: key, value
     * returns: N/A
     */
-    void build();
+    void insert(_Key key, _Value value);
 
    /**
      * Purpose: Query a key using the dual bplus tree 
