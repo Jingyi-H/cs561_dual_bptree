@@ -39,5 +39,5 @@ public:
      * Param: range to be queried  
      * returns: vector of keys within the range
      */
-    std::vector<std::pair<key_type, value_type>> rangeQuery(key_type low, key_type high, BeTraits &traits);
-}
+    std::vector<std::pair<_Key, _Value>> rangeQuery(_Key low, _Key high, BeTraits &traits);
+};

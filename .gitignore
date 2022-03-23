@@ -3,3 +3,7 @@
 *.exe
 tree_dat/*
 .vscode/*
+*.txt
+*.dat
+main
+workloadgenerator
