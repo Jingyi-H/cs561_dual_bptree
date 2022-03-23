@@ -65,7 +65,7 @@ int main(int argc, char **argv)
         inner_pair.second = data[i];
         kvs.push_back(inner_pair);
     }
-    DualBeTree<int,int> dualbtree(kvs,1);
+    DualBeTree<int,int> dualbtree;
 
     
     std::vector<int> queries = generatePointQueries(data, data.size());

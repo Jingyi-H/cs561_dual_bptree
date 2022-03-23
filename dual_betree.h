@@ -17,7 +17,7 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree(std::vector<std::pair<_Key, _Value>> _key_value_pairs, uint _buffer_size);
+    DualBeTree();
 
     /**
     * Purpose: insert key value pair to dual bplus tree
@@ -33,11 +33,6 @@ public:
      */
     bool query(_Key key); // TODO: what is the return type: bool or _Value?
 
-     /**
-     * Purpose: Query a range of key using the dual bplus tree 
-     * Param: range to be queried  
-     * returns: vector of keys within the range
-     */
-    std::vector<std::pair<_Key, _Value>> rangeQuery(_Key low, _Key high, BeTraits &traits);
+ 
 };
 #endif
