@@ -7,8 +7,9 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
-    BeTree<_Key, _Value> sorted;
-    BeTree<_Key, _Value> unsorted;
+public:
+    BeTree<_Key, _Value>* sorted;
+    BeTree<_Key, _Value>* unsorted;
     _Key last_element;
 
 public:

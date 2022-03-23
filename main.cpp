@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     ifs.read((char *)data.data(), filesize);
 
     // Instantiate dual bplus tree
-    DualBeTree<int,int> dualbptree;
+    DualBeTree<int,int> dualbptree = DualBeTree<int,int>();
   
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
