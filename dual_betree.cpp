@@ -1,32 +1,32 @@
 #include "dual_betree.h"
+#define DEFAULT -1
 
 template <typename _Key, typename _Value>
-DualBeTree<_Key, _Value>::DualBeTree(std::vector<std::pair<_Key, _Value>> _key_value_pairs, uint _buffer_size)
+DualBeTree<_Key, _Value>::DualBeTree()
 {
     // constructor
-    this->key_value_pairs = _key_value_pairs;
-    this->buffer_size = _buffer_size;
     BeTree<_Key, _Value> sorted("sortedT", "./tree_dat", 4096, 10000);
     BeTree<_Key, _Value> unsorted("unsortedT", "./tree_dat", 4096, 10000);
-    this-> sorted = sorted;
-    this-> unsorted =  unsorted;
+    this->sorted = sorted;
+    this->unsorted =  unsorted;
+    this->last_element = DEFAULT;
+    
 }
 
 template <typename _Key, typename _Value>
-void DualBeTree<_Key, _Value>::build() {
+void DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     /** build dual bplus tree
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
-    for (auto& pair : this->key_value_pairs) {
-        if (pair.first < this->buffer_elements) {
-            this->unsorted.insert(pair.first, pair.second);
-        } else {
-            this->sorted.insert(pair.first, pair.second);
-            this->buffer_elements = pair.first;
-        }
+    if (pair.first < this->buffer_elements) {
+        this->unsorted.insert(pair.first, pair.second);
+    } else {
+        this->sorted.insert(pair.first, pair.second);
+        this->last_element = pair.first;
     }
 }
+//  bulkload_leaf
 
 template <typename _Key, typename _Value>
 bool DualBeTree<_Key, _Value>::query(_Key key) {
