@@ -11,7 +11,7 @@ simple_analysis: betree.h analysis.cpp -DBPLUS
 analysis: betree.h analysis.cpp
 	g++ -g -std=c++11 betree.h analysis.cpp -o analysis.o -DTIMER -DBPLUS
 
-main: main.cpp dual_betree.h dual_betree.cpp
+main: main.cpp betree.h dual_betree.h dual_betree.cpp
 	g++ -g -std=c++11 -o $@ $^
 
 workloadgenerator: workload_generator.cpp
@@ -19,7 +19,7 @@ workloadgenerator: workload_generator.cpp
 
 clean: 
 	$(RM) *.o
-	$(RM) tree_dat/*
-	rm -r tree_dat/
 	rm main
 	rm workloadgenerator
+	$(RM) tree_dat/*
+	rm -r tree_dat/

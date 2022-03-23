@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <functional>
 #include <chrono>
-#include "betree.h"
 #include "dual_betree.cpp"
 using namespace std; 
 

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#ifndef DUALBETREE_H
+#define DUALBETREE_H
 #include "betree.h"
 
 template <typename _Key, typename _Value>
@@ -41,3 +43,4 @@ public:
      */
     std::vector<std::pair<_Key, _Value>> rangeQuery(_Key low, _Key high, BeTraits &traits);
 };
+#endif
