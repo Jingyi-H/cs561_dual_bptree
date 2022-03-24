@@ -81,14 +81,14 @@ int main(int argc, char **argv)
             no++;
         }
     }
-    std::cout << "found:" << yes << endl;
-    std::cout << "notfound:" << no << endl;
     
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     unsigned long long point_query_time = duration.count();
-    std::cout << "Time taken to perform point queries from zonemap = " << point_query_time << " microseconds" << endl;
-
+    std::cout << "Time taken to perform" << queries.size() << "point queries from zonemap = " << point_query_time << " microseconds" << endl;
+    std::cout << "found:" << yes << endl;
+    std::cout << "notfound:" << no << endl;
+    
 
     return 1; 
 }
