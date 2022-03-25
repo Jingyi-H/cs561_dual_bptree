@@ -63,7 +63,8 @@ int main(int argc, char **argv)
     auto insert_start = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
-        dualbptree.insert(i,i);
+        if (!dualbptree.insert(i,i))
+            cout << "Failed to insert key " << i << endl;
     }
     auto insert_stop = std::chrono::high_resolution_clock::now();
     auto duration  = std::chrono::duration_cast<std::chrono::microseconds>(insert_stop - insert_start);

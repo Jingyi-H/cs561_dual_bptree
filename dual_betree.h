@@ -7,10 +7,11 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
-public:
     BeTree<_Key, _Value>* sorted;
     BeTree<_Key, _Value>* unsorted;
     _Key last_element;
+    uint sorted_size;
+    uint unsorted_size;
 
 public:
     /**
