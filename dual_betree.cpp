@@ -1,6 +1,8 @@
 #include "dual_betree.h"
 #define DEFAULT -1
 
+using namespace std;
+
 template <typename _Key, typename _Value>
 DualBeTree<_Key,_Value>::DualBeTree()
 {
@@ -14,24 +16,27 @@ DualBeTree<_Key,_Value>::DualBeTree()
 }
 
 template <typename _Key, typename _Value>
-void DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
-    /** build dual bplus tree
+bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
+    /** insert element to 
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
+    bool flag;
+    
     if (key < this->last_element) {
-        this->unsorted->insert(key, value);
+        flag = this->unsorted->insert(key, value);
     } else {
-        this->sorted->insert_to_tail_leaf(key, value);
+        flag = this->sorted->insert_to_tail_leaf(key, value);
         this->last_element = key;
     }
+    return flag;
 }
 //  bulkload_leaf
 
 template <typename _Key, typename _Value>
 bool DualBeTree<_Key, _Value>::query(_Key key) {
     // point query
-    if(key > sorted->getMaximumKey()){
+    if(key > this->sorted->getMaximumKey()){
         return this->unsorted->query(key);
     }else{
         return this->unsorted->query(key) || this->sorted->query(key);

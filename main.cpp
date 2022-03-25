@@ -62,7 +62,7 @@ int main(int argc, char **argv)
   
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
-        dualbptree.insert(i,i);    
+        dualbptree.insert(i,i);
     }
 
     // execute point queries on dualbptree
@@ -73,11 +73,15 @@ int main(int argc, char **argv)
     int yes = 0;
     int no = 0;
 
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     for (int i = 0; i < queries.size(); i++){
         if(dualbptree.query(queries[i])){
             yes++;
         }
         else {
+            if (queries[i] < data.size()) {
+                std::cout << "Error: key " << queries[i] << " not found" << endl;
+            }
             no++;
         }
     }
@@ -85,7 +89,7 @@ int main(int argc, char **argv)
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     unsigned long long point_query_time = duration.count();
-    std::cout << "Time taken to perform" << queries.size() << "point queries from zonemap = " << point_query_time << " microseconds" << endl;
+    std::cout << "Time taken to perform " << queries.size() << " point queries = " << point_query_time << " microseconds" << endl;
     std::cout << "found:" << yes << endl;
     std::cout << "notfound:" << no << endl;
     

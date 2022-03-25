@@ -25,7 +25,7 @@ public:
     * Param: key, value
     * returns: N/A
     */
-    void insert(_Key key, _Value value);
+    bool insert(_Key key, _Value value);
 
    /**
      * Purpose: Query a key using the dual bplus tree 
