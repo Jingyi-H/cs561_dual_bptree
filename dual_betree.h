@@ -7,10 +7,11 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
-public:
     BeTree<_Key, _Value>* sorted;
     BeTree<_Key, _Value>* unsorted;
     _Key last_element;
+    uint sorted_size;
+    uint unsorted_size;
 
 public:
     /**
@@ -25,7 +26,7 @@ public:
     * Param: key, value
     * returns: N/A
     */
-    void insert(_Key key, _Value value);
+    bool insert(_Key key, _Value value);
 
    /**
      * Purpose: Query a key using the dual bplus tree 

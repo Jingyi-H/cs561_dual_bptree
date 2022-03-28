@@ -1,6 +1,8 @@
 #include "dual_betree.h"
 #define DEFAULT -1
 
+using namespace std;
+
 template <typename _Key, typename _Value>
 DualBeTree<_Key,_Value>::DualBeTree()
 {
@@ -10,30 +12,39 @@ DualBeTree<_Key,_Value>::DualBeTree()
     this->sorted = sorted;
     this->unsorted =  unsorted;
     this->last_element = DEFAULT;
+    this->sorted_size = 0;
+    this->unsorted_size = 0;
     
 }
 
 template <typename _Key, typename _Value>
-void DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
-    /** build dual bplus tree
+bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
+    /** insert element to 
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
     */
+    bool flag;
+    
     if (key < this->last_element) {
-        this->unsorted->insert(key, value);
+        flag = this->unsorted->insert(key, value);
+        if (flag) {
+            this->unsorted_size++;
+        }
     } else {
-        this->sorted->insert_to_tail_leaf(key, value);
-        this->last_element = key;
+        flag = this->sorted->insert_to_tail_leaf(key, value);
+        if (flag) {
+            this->last_element = key;
+        }
     }
+    return flag;
 }
-//  bulkload_leaf
 
 template <typename _Key, typename _Value>
 bool DualBeTree<_Key, _Value>::query(_Key key) {
     // point query
-    if(key > sorted->getMaximumKey()){
-        return this->unsorted->query(key);
-    }else{
+    if (this->sorted_size < this->unsorted_size) {
+        return this->sorted->query(key) || this->unsorted->query(key);
+    } else {
         return this->unsorted->query(key) || this->sorted->query(key);
     }
 }
