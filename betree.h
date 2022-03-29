@@ -1916,6 +1916,9 @@ public:
     // template <typename Iterator>
     bool insert_to_tail_leaf(key_type key, value_type value) 
     {
+        //insert to tail leaf; if leaf is full, split tail leaf
+        
+
          // first create leaf node
         uint new_leaf_id = manager->allocate();
         BeNode<key_type, value_type, knobs, compare> *leaf = new BeNode<key_type, value_type, knobs, compare>(manager, new_leaf_id);
