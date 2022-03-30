@@ -1421,7 +1421,6 @@ public:
         // every node has either a buffer or data. So essentially, both are in the same place
         data = (struct Data<key_type, value_type, knobs, compare> *)(disk_store.block_buf + sizeof(bool) + sizeof(bool) + sizeof(uint) + sizeof(uint) + sizeof(int));
         buffer = (struct Buffer<key_type, value_type, knobs, compare> *)(disk_store.block_buf + sizeof(bool) + sizeof(bool) + sizeof(uint) + sizeof(uint) + sizeof(int));
-
         child_key_values = (key_type *)(disk_store.block_buf + sizeof(uint) + sizeof(bool) + sizeof(bool) + sizeof(uint) + sizeof(int) + sizeof(struct Buffer<key_type, value_type, knobs, compare>));
 
         int num = knobs::NUM_CHILDREN;
@@ -1950,11 +1949,10 @@ public:
             
             // insert to the tail leaf, see if tail is going to split
             bool split = tail_leaf->insertInLeaf(insert_pair);
-            manager->addDirtyNode(tail_leaf->getId());
 
             if (split) {
                 key_type split_key = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
-                BeNode<key_type, value_type, knobs, compare> new_node = *tail_leaf;
+                
                 if (root->isLeaf()) {
                     // if root and tail leaf are the same: only one node in tree
                     // create new root
@@ -1971,13 +1969,28 @@ public:
 
                     // change old root
                     root->setRoot(false);
+
                     // set parents
                     root->setParent(new_root_id);
+                    
                     manager->addDirtyNode(root->getId());
+                    manager->addDirtyNode(tail_leaf->getId());
                     root = new_root;
                 }
                 else {
-                    // case 3: if tail leaf is not the root
+                    // case 3: if tail leaf is not the root, create a new tail leaf
+                    uint new_tail_id = manager->allocate();
+                    BeNode<key_type, value_type, knobs, compare> *new_tail = new BeNode<key_type, value_type, knobs, compare>(manager, new_tail_id);
+                    new_tail->setLeaf(true);
+                    new_tail->setParent(tail_leaf->getParent());
+                    tail_leaf->setNextNode(new_tail_id);
+
+                    manager->addDirtyNode(new_tail_id);
+                    manager->addDirtyNode(tail_leaf->getId());
+
+                    tail_leaf = new_tail;
+                    tail_leaf_id = new_tail_id;
+
                     while (true)
                     {
                         BeNode<key_type, value_type, knobs, compare> child_parent(manager, tail_leaf->getParent());
@@ -1993,7 +2006,7 @@ public:
                             // split root
                             child_parent.splitInternal(split_key, traits, tail_leaf_id);
                             BeNode<key_type, value_type, knobs, compare> new_sibling(manager, tail_leaf_id);
-                            // manager->addDirtyNode(new_node_id);
+                            manager->addDirtyNode(tail_leaf->getId());
                             traits.internal_splits++;
 
                             // create new root
@@ -2019,10 +2032,10 @@ public:
                         }
                         // if flag returned true but child parent is not root
                         // split internal node and check for propagating splits upwards
-
                         child_parent.splitInternal(split_key, traits, tail_leaf_id);
                         traits.internal_splits++;
                         manager->addDirtyNode(child_parent.getId());
+                        manager->addDirtyNode(tail_leaf->getId());
                     }
                 }
                 
