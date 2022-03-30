@@ -60,35 +60,44 @@ int main(int argc, char **argv)
     // Instantiate dual bplus tree
     DualBeTree<int,int> dualbptree = DualBeTree<int,int>();
   
+    auto insert_start = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
-        dualbptree.insert(i,i);    
+        if (!dualbptree.insert(i,i))
+            cout << "Failed to insert key " << i << endl;
     }
+    auto insert_stop = std::chrono::high_resolution_clock::now();
+    auto duration  = std::chrono::duration_cast<std::chrono::microseconds>(insert_stop - insert_start);
+    unsigned long long insert_time = duration.count();
+    cout << "Time take to insert " << data.size() << " keys = " << insert_time << "microseconds" << endl;
 
     // execute point queries on dualbptree
-    std::vector<int> queries = generatePointQueries(data, data.size());
+    // std::vector<int> queries = generatePointQueries(data, data.size());
+    std::vector<int> queries = data;
 
-    auto start = std::chrono::high_resolution_clock::now();
+    auto query_start = std::chrono::high_resolution_clock::now();
     // query from dualbptree
     int yes = 0;
     int no = 0;
 
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     for (int i = 0; i < queries.size(); i++){
         if(dualbptree.query(queries[i])){
             yes++;
         }
         else {
+            std::cout << "Key " << queries[i] << " not found" << endl;
             no++;
         }
     }
+    
+    auto query_stop = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(query_stop - query_start);
+    unsigned long long point_query_time = duration.count();
+    std::cout << "Time taken to perform " << queries.size() << " point queries = " << point_query_time << " microseconds" << endl;
     std::cout << "found:" << yes << endl;
     std::cout << "notfound:" << no << endl;
     
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    unsigned long long point_query_time = duration.count();
-    std::cout << "Time taken to perform point queries from zonemap = " << point_query_time << " microseconds" << endl;
-
 
     return 1; 
 }
