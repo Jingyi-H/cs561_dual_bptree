@@ -34,6 +34,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
             this->last_element = key;
+            this->sorted_size++;
         }
     }
     return flag;

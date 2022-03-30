@@ -1,7 +1,7 @@
 
 
 MKDIR_P = mkdir -p
-all: analysis main workloadgenerator
+all: main workloadgenerator
 	$(MKDIR_P) tree_dat
 	
 
