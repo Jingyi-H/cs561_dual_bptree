@@ -1952,14 +1952,14 @@ public:
 
             if (split) {
                 // create a new leaf node to store the split leaf
-                key_type tail_split_key; // = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
-                uint new_tail_id;
-                tail_leaf->splitLeaf(tail_split_key, traits, new_tail_id);
+                // key_type tail_split_key; // = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
+                tail_leaf->splitLeaf(tail_split_key, traits, new_tail_id); 
+                uint new_tail_id = manager->allocate();
                 BeNode<key_type, value_type, knobs, compare>* new_tail = new BeNode<key_type, value_type, knobs, compare>(manager, new_tail_id);
-                traits.leaf_splits++;
+                traits.leaf_splits++; 
 
-                manager->addDirtyNode(new_tail_id);
-                manager->addDirtyNode(tail_leaf->getId());
+                // manager->addDirtyNode(new_tail_id);
+                // manager->addDirtyNode(tail_leaf->getId());
 
                
                 if (root->isLeaf()) {
@@ -1980,30 +1980,37 @@ public:
 
                     // change old root
                     root->setRoot(false);
+                    root->setNextNode(new_tail->getId());
 
                     // set parents
+                    new_tail->setParent(new_root_id);
                     root->setParent(new_root_id);
                     
+                    manager->addDirtyNode(new_tail->getId());
                     manager->addDirtyNode(root->getId());
-                    manager->addDirtyNode(tail_leaf->getId());
+                    
                     root = new_root;
-                
+                    // newly added leaf is always tail
                     tail_leaf = new_tail;
-                    tail_leaf_id = new_tail_id;
+                    tail_leaf_id = new_tail->getId();
                 }
                 else {
                     // case 3: if tail leaf is not the root, 
                     // check if we need to split its parent node (internal nodes)
                     key_type split_key = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
-                    uint new_node_id = new_tail->getId();
-                    BeNode<key_type, value_type, knobs, compare> new_node(manager, new_node_id);
+                    uint new_node_id = new_tail->getId();                    
                     
+                    manager->addDirtyNode(new_tail->getId());
+                    manager->addDirtyNode(tail_leaf->getId());
+
                     tail_leaf = new_tail;
                     tail_leaf_id = new_tail_id;
-                    
+
+                    BeNode<key_type, value_type, knobs, compare> new_node(manager, new_node->getId());
+
                     while (true)
                     {
-                        BeNode<key_type, value_type, knobs, compare> child_parent(manager, tail_leaf->getParent());
+                        BeNode<key_type, value_type, knobs, compare> child_parent(manager, new_node->getParent());
                         bool flag = child_parent.addPivot(split_key, new_node_id);
                         manager->addDirtyNode(child_parent.getId());
                         if (!flag)
