@@ -1952,9 +1952,9 @@ public:
 
             if (split) {
                 // create a new leaf node to store the split leaf
-                // key_type tail_split_key; // = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
-                tail_leaf->splitLeaf(tail_split_key, traits, new_tail_id); 
+                key_type tail_split_key; // = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
                 uint new_tail_id = manager->allocate();
+                tail_leaf->splitLeaf(tail_split_key, traits, new_tail_id); 
                 BeNode<key_type, value_type, knobs, compare>* new_tail = new BeNode<key_type, value_type, knobs, compare>(manager, new_tail_id);
                 traits.leaf_splits++; 
 
@@ -2006,12 +2006,11 @@ public:
                     tail_leaf = new_tail;
                     tail_leaf_id = new_tail_id;
 
-                    BeNode<key_type, value_type, knobs, compare> new_node(manager, new_node->getId());
+                    BeNode<key_type, value_type, knobs, compare> new_node(manager, tail_leaf->getId());
 
                     while (true)
                     {
-                        BeNode<key_type, value_type, knobs, compare> child_parent(manager, new_node->getParent());
-                        bool flag = child_parent.addPivot(split_key, new_node_id);
+                        BeNode<key_type, value_type, knobs, compare> child_parent(manager, new_node.getParent());                        bool flag = child_parent.addPivot(split_key, new_node_id);
                         manager->addDirtyNode(child_parent.getId());
                         if (!flag)
                         {
