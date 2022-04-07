@@ -12,22 +12,38 @@ using namespace std;
 // genetate point query
 std::vector<int> generatePointQueries(std::vector<int> data, int n)
 {
-    std::vector<int> queries(data.begin(), data.end());
-
-    // add a few elements out of range
-    int non_existing_counter = (data.size() * 0.1);
-    std::uniform_int_distribution<int> dist{n, (int)(1.8 * n)};
+    std::vector<int> queries;
+    int size = n*0.1;
+    int non_existing_counter = (n*0.1);
+    std::uniform_int_distribution<int> dist{0,n};
     // Initialize the random_device
     std::random_device rd;
-    // Seed the engine
+     // Seed the engine
     std::mt19937_64 generator(rd());
     std::set<int> non_existing;
     while (non_existing.size() != non_existing_counter)
     {
-        non_existing.insert(dist(generator));
+        non_existing.insert(data[dist(generator)]);
     }
+    
+    queries.insert(queries.end(),non_existing.begin(),non_existing.end());
+   /* while (i < size){
+        int random = rand() % size;
+        if (std::count(queries.begin(), queries.end(), data[random])){
+            continue;
+        }
+        else{
+            queries.insert(data[random]);
+            i++;
+        }
+    }*/
+    // add a few elements out of range
+    //int non_existing_counter = (data.size() * 0.1);
+    //std::uniform_int_distribution<int> dist{n, (int)(1.8 * n)};
+    
+   
 
-    queries.insert(queries.end(), non_existing.begin(), non_existing.end());
+    //queries.insert(queries.end(), non_existing.begin(), non_existing.end());
 
     // shuffle indexes
     std::random_shuffle(queries.begin(), queries.end());
@@ -59,6 +75,7 @@ int main(int argc, char **argv)
 
 //start
     //instantiate betree
+    /*
     cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
     BeTree<int,int> tree("manager", "./tree_dat", 4096, 10000);
 
@@ -75,7 +92,7 @@ int main(int argc, char **argv)
 
     // execute point queries on dualbptree
     // std::vector<int> queries = generatePointQueries(data, data.size());
-    std::vector<int> queries = data;
+    std::vector<int> queries = generatePointQueries(data, data.size());
 
     auto query_start1 = std::chrono::high_resolution_clock::now();
     // query from dualbptree
@@ -101,7 +118,7 @@ int main(int argc, char **argv)
     std::cout << "found:" << yes1 << endl;
     std::cout << "notfound:" << no1 << endl;
     std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-
+    */
 //end
 
     // Instantiate dual bplus tree
@@ -120,10 +137,11 @@ int main(int argc, char **argv)
     auto duration  = std::chrono::duration_cast<std::chrono::microseconds>(insert_stop - insert_start);
     unsigned long long insert_time = duration.count();
     std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout << "Time take to insert " << data.size() << " keys = " << insert_time << " microseconds" << endl;
+    cout << "Time taken to insert " << data.size() << " keys = " << insert_time << " microseconds" << endl;
 
     // execute point queries on dualbptree
-    // std::vector<int> queries = generatePointQueries(data, data.size());
+    std::vector<int> queries = generatePointQueries(data, data.size());
+    cout<<"Done point generate"<<endl;
     // std::vector<int> queries = data;
 
     auto query_start = std::chrono::high_resolution_clock::now();
