@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#define TTYPE int
 #ifndef DUALBETREE_H
 #define DUALBETREE_H
 #include "betree.h"
@@ -33,8 +34,7 @@ public:
      * Param: Key to be queried  
      * returns: True if element is found, else returns false 
      */
-    bool query(_Key key); // TODO: what is the return type: bool or _Value?
+    bool query(_Key key);
 
- 
 };
 #endif
