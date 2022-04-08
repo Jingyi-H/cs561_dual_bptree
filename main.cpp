@@ -138,7 +138,7 @@ int main(int argc, char **argv)
     cout << "Time taken to insert " << data.size() << " keys = " << insert_time << " microseconds" << endl;
 
     // execute point queries on dualbptree
-    std::vector<int> queries = generatePointQueries(data, data.size());
+    // std::vector<int> queries = generatePointQueries(data, data.size());
     cout<<"Done point generate"<<endl;
     // std::vector<int> queries = data;
 
