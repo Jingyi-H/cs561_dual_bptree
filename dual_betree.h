@@ -33,8 +33,14 @@ public:
      * Param: Key to be queried  
      * returns: True if element is found, else returns false 
      */
-    bool query(_Key key); // TODO: what is the return type: bool or _Value?
+    bool query(_Key key);
 
- 
+    /**
+     * Purpose: Query a key, search the most frequently inserted tree first 
+     * Param: Key to be queried  
+     * returns: True if element is found, else returns false 
+     */
+    bool fquery(_Key key); // 
+
 };
 #endif

@@ -24,17 +24,17 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     * out-of-order elements to unsorted bplus tree
     */
     bool flag;
-    
-    if (key < this->last_element) {
-        flag = this->unsorted->insert(key, value);
-        if (flag) {
-            this->unsorted_size++;
-        }
-    } else {
+    // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
+    if (key >= this->sorted->getMaximumKey()) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
             this->last_element = key;
             this->sorted_size++;
+        }
+    } else {
+        flag = this->unsorted->insert(key, value);
+        if (flag) {
+            this->unsorted_size++;
         }
     }
     return flag;
@@ -48,5 +48,9 @@ bool DualBeTree<_Key, _Value>::query(_Key key) {
     } else {
         return this->unsorted->query(key) || this->sorted->query(key);
     }
+}
+
+bool DualBeTree<_Key, _Value>::query(_Key key) {
+
 }
 
