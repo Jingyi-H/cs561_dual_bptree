@@ -75,7 +75,6 @@ int main(int argc, char **argv)
 
 //start
     //instantiate betree
-    /*
     cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
     BeTree<int,int> tree("manager", "./tree_dat", 4096, 10000);
 
@@ -118,7 +117,6 @@ int main(int argc, char **argv)
     std::cout << "found:" << yes1 << endl;
     std::cout << "notfound:" << no1 << endl;
     std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    */
 //end
 
     // Instantiate dual bplus tree
