@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#define TTYPE int
 #ifndef DUALBETREE_H
 #define DUALBETREE_H
 #include "betree.h"
@@ -34,13 +35,6 @@ public:
      * returns: True if element is found, else returns false 
      */
     bool query(_Key key);
-
-    /**
-     * Purpose: Query a key, search the most frequently inserted tree first 
-     * Param: Key to be queried  
-     * returns: True if element is found, else returns false 
-     */
-    bool fquery(_Key key); // 
 
 };
 #endif

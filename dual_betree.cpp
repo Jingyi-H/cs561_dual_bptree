@@ -1,6 +1,8 @@
 #include "dual_betree.h"
 #define DEFAULT -1
-
+#define SORTED 1
+#define UNSORTED 0
+#define FREQ_QUEUE_SIZE 10
 using namespace std;
 
 template <typename _Key, typename _Value>
@@ -31,7 +33,11 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->last_element = key;
             this->sorted_size++;
         }
-    } else {
+    }
+    else if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
+        flag = this->sorted->insert_to_tail_first(key, value);
+    }
+    else {
         flag = this->unsorted->insert(key, value);
         if (flag) {
             this->unsorted_size++;
@@ -50,7 +56,4 @@ bool DualBeTree<_Key, _Value>::query(_Key key) {
     }
 }
 
-bool DualBeTree<_Key, _Value>::query(_Key key) {
-
-}
 
