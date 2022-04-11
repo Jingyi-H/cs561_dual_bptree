@@ -2020,7 +2020,6 @@ public:
                         {
                             // split root
                             child_parent.splitInternal(split_key, traits, new_node_id);
-                            std::cout << "split internal node " << new_node_id << ": "<< child_parent.getPivotsCtr() << std::endl;
                             BeNode<key_type, value_type, knobs, compare> new_sibling(manager, new_node_id);
                             manager->addDirtyNode(new_node_id);
                             traits.internal_splits++;
@@ -2050,7 +2049,6 @@ public:
                         // split internal node and check for propagating splits upwards
 
                         child_parent.splitInternal(split_key, traits, new_node_id);
-                        std::cout << "split internal node " << new_node_id << ": "<< child_parent.getPivotsCtr() << std::endl;
                         traits.internal_splits++;
                         manager->addDirtyNode(child_parent.getId());
                         new_node.setToId(new_node_id);
@@ -2167,7 +2165,6 @@ public:
                         {
                             // split root
                             child_parent.splitInternal(split_key, traits, new_node_id);
-                            std::cout << "split internal node " << new_node_id << ": "<< child_parent.getPivotsCtr() << std::endl;
                             BeNode<key_type, value_type, knobs, compare> new_sibling(manager, new_node_id);
                             manager->addDirtyNode(new_node_id);
                             traits.internal_splits++;
@@ -2197,7 +2194,6 @@ public:
                         // split internal node and check for propagating splits upwards
 
                         child_parent.splitInternal(split_key, traits, new_node_id);
-                        std::cout << "split internal node " << new_node_id << ": "<< child_parent.getPivotsCtr() << std::endl;
                         traits.internal_splits++;
                         manager->addDirtyNode(child_parent.getId());
                         new_node.setToId(new_node_id);
