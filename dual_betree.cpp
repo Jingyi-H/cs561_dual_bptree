@@ -27,14 +27,14 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     */
     bool flag;
     // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    if (key >= this->sorted->getMaximumKey()) {
+    if (key >= this->last_element) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
             this->last_element = key;
             this->sorted_size++;
         }
     }
-    else if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
+    else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
         flag = this->sorted->insert_to_tail_first(key, value);
     }
     else {
