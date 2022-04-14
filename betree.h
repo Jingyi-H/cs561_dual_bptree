@@ -2161,7 +2161,8 @@ public:
 
                 while (true)
                 {
-                    BeNode<key_type, value_type, knobs, compare> child_parent(manager, new_node.getParent());                        bool flag = child_parent.addPivot(split_key, new_node_id);
+                    BeNode<key_type, value_type, knobs, compare> child_parent(manager, new_node.getParent());                        
+                    bool flag = child_parent.addPivot(split_key, new_node_id);
                     manager->addDirtyNode(child_parent.getId());
                     if (!flag)
                     {
