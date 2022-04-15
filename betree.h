@@ -2066,7 +2066,7 @@ public:
 
     // template <typename Iterator>
     bool insert_to_tail_first(key_type key, value_type value) 
-    {
+    {     
         std::pair<key_type, value_type> element_to_insert[] = {std::pair<key_type, value_type>(key, value)};
         int num_to_insert = 1;
         // now add to tree
@@ -2207,7 +2207,6 @@ public:
                 
             }
         }
-
         return true;
     }
 

@@ -8,11 +8,15 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
+    public:
     BeTree<_Key, _Value>* sorted;
     BeTree<_Key, _Value>* unsorted;
     _Key last_element;
     uint sorted_size;
     uint unsorted_size;
+    uint sum;
+    float ss;
+    float sd;
 
 public:
     /**
@@ -27,7 +31,7 @@ public:
     * Param: key, value
     * returns: N/A
     */
-    bool insert(_Key key, _Value value);
+    bool insert(_Key key, _Value value, int num_sd);
 
    /**
      * Purpose: Query a key using the dual bplus tree 
