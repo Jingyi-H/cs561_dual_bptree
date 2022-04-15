@@ -12,6 +12,7 @@ class DualBeTree
     _Key last_element;
     uint sorted_size;
     uint unsorted_size;
+    std::vector<bool> log;
 
 public:
     /**

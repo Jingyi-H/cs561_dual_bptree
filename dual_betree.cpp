@@ -24,17 +24,24 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     * out-of-order elements to unsorted bplus tree
     */
     bool flag;
-    
     if (key < this->last_element) {
         flag = this->unsorted->insert(key, value);
         if (flag) {
             this->unsorted_size++;
+            if (this->log.size() == 10){
+                this->log.erase(log.begin());
+                this->log.push_back(False);
+            }
         }
     } else {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
             this->last_element = key;
             this->sorted_size++;
+            if (this->log.size() == 10){
+                this->log.erase(log.begin());
+                this->log.push_back(True);
+            }
         }
     }
     return flag;
