@@ -13,7 +13,8 @@ DualBeTree<_Key,_Value>::DualBeTree()
     unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 10000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
-    this->last_element = DEFAULT;
+    this->tail_min = DEFAULT;
+    this->tail_max = DEFAULT;
     this->sorted_size = 0;
     this->unsorted_size = 0;
     
@@ -26,16 +27,19 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     * out-of-order elements to unsorted bplus tree
     */
     bool flag;
-    // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    if (key >= this->last_element) {
+    if (key >= this->tail_max) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
-            this->last_element = key;
+            this->tail_max = key;
             this->sorted_size++;
         }
     }
+    // else if (key >= this->tail_min) {
     else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
         flag = this->sorted->insert_to_tail_first(key, value);
+        if (flag) {
+            this->sorted_size++;
+        }
     }
     else {
         flag = this->unsorted->insert(key, value);
@@ -56,4 +60,26 @@ bool DualBeTree<_Key, _Value>::query(_Key key) {
     }
 }
 
+template <typename _Key, typename _Value>
+void DualBeTree<_Key, _Value>::analysis() {
+    cout << "Sorted Tree Size = " << this->sorted_size << endl;
+    cout << "Unsorted Tree Size = " << this->unsorted_size << endl;
+    cout << "-------Test Dual B+ Tree-------" << endl;
+    cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
+    cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
 
+    this->sorted->fanout();
+    cout << "------Statistics of sorted tree------" << endl;
+    cout << "internal splits=" << this->sorted->traits.internal_splits << endl;
+    cout << "num_leaf_nodes=" << this->sorted->traits.num_leaf_nodes << endl;
+    cout << "num_internal_nodes=" << this->sorted->traits.num_internal_nodes << endl;
+    cout << "average fanout=" << this->sorted->traits.average_fanout << endl;
+    
+    this->unsorted->fanout();
+    cout << "------Statistics of unsorted tree------" << endl;
+    cout << "internal splits=" << this->unsorted->traits.internal_splits << endl;
+    cout << "num_leaf_nodes=" << this->unsorted->traits.num_leaf_nodes << endl;
+    cout << "num_internal_nodes=" << this->unsorted->traits.num_internal_nodes << endl;
+    cout << "average fanout=" << this->unsorted->traits.average_fanout << endl;
+
+}

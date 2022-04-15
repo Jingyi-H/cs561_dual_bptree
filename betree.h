@@ -1914,6 +1914,9 @@ public:
     
     bool insert_to_tail_leaf(key_type key, value_type value) 
     {
+#ifdef TIMER
+        auto start = std::chrono::high_resolution_clock::now();
+#endif
         std::pair<key_type, value_type> insert_pair;
         insert_pair.first = key;
         insert_pair.second = value;
@@ -2060,12 +2063,20 @@ public:
         }
 
         return true;
-    }
+#ifdef TIMER
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+        timer.insert_time += duration.count();
+#endif
+   }
 
     // template <typename Iterator>
     bool insert_to_tail_first(key_type key, value_type value) 
     {
-        std::pair<key_type, value_type> element_to_insert[] = {std::pair<key_type, value_type>(key, value)};
+#ifdef TIMER
+        auto start = std::chrono::high_resolution_clock::now();
+#endif
+       std::pair<key_type, value_type> element_to_insert[] = {std::pair<key_type, value_type>(key, value)};
         int num_to_insert = 1;
         
         // insert to the tail leaf, see if tail is going to split
@@ -2177,6 +2188,12 @@ public:
                 }
             }
         }
+
+#ifdef TIMER
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+        timer.insert_time += duration.count();
+#endif
 
         return true;
     }

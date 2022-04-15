@@ -10,7 +10,8 @@ class DualBeTree
 {
     BeTree<_Key, _Value>* sorted;
     BeTree<_Key, _Value>* unsorted;
-    _Key last_element;
+    _Key tail_min;
+    _Key tail_max;
     uint sorted_size;
     uint unsorted_size;
 
@@ -36,5 +37,6 @@ public:
      */
     bool query(_Key key);
 
+    void analysis();
 };
 #endif
