@@ -30,7 +30,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->unsorted_size++;
             if (this->freq.size() == 10){
                 this->freq.erase(log.begin());
-                this->freq.push_back(False);
+                this->freq.push_back(false);
             }
         }
     } else {
@@ -40,7 +40,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->sorted_size++;
             if (this->freq.size() == 10){
                 this->freq.erase(log.begin());
-                this->freq.push_back(True);
+                this->freq.push_back(true);
             }
         }
     }
@@ -60,7 +60,7 @@ bool DualBeTree<_Key, _Value>::query(_Key key) {
 template <typename _Key, typename _Value>
 bool DualBeTree<_Key, _Value>::query_recent(_Key key) {
     // point query
-    if (this->log.back() == True) {
+    if (this->log.back() == true) {
         return this->sorted->query(key) || this->unsorted->query(key);
     } else {
         return this->unsorted->query(key) || this->sorted->query(key);
