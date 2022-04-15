@@ -28,9 +28,9 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         flag = this->unsorted->insert(key, value);
         if (flag) {
             this->unsorted_size++;
-            if (this->log.size() == 10){
-                this->log.erase(log.begin());
-                this->log.push_back(False);
+            if (this->freq.size() == 10){
+                this->freq.erase(log.begin());
+                this->freq.push_back(False);
             }
         }
     } else {
@@ -38,9 +38,9 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         if (flag) {
             this->last_element = key;
             this->sorted_size++;
-            if (this->log.size() == 10){
-                this->log.erase(log.begin());
-                this->log.push_back(True);
+            if (this->freq.size() == 10){
+                this->freq.erase(log.begin());
+                this->freq.push_back(True);
             }
         }
     }
@@ -51,6 +51,16 @@ template <typename _Key, typename _Value>
 bool DualBeTree<_Key, _Value>::query(_Key key) {
     // point query
     if (this->sorted_size < this->unsorted_size) {
+        return this->sorted->query(key) || this->unsorted->query(key);
+    } else {
+        return this->unsorted->query(key) || this->sorted->query(key);
+    }
+}
+
+template <typename _Key, typename _Value>
+bool DualBeTree<_Key, _Value>::query_recent(_Key key) {
+    // point query
+    if (this->log.back() == True) {
         return this->sorted->query(key) || this->unsorted->query(key);
     } else {
         return this->unsorted->query(key) || this->sorted->query(key);

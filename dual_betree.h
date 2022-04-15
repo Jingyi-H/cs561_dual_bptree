@@ -12,7 +12,7 @@ class DualBeTree
     _Key last_element;
     uint sorted_size;
     uint unsorted_size;
-    std::vector<bool> log;
+    std::vector<bool> freq;
 
 public:
     /**
@@ -36,6 +36,7 @@ public:
      */
     bool query(_Key key); // TODO: what is the return type: bool or _Value?
 
+    bool query_recent(_Key key);
  
 };
 #endif
