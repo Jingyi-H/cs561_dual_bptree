@@ -27,7 +27,6 @@ std::vector<int> generatePointQueries(std::vector<int> data, int n)
     }
     
     queries.insert(queries.end(),non_existing.begin(),non_existing.end());
-   
     // shuffle indexes
     std::random_shuffle(queries.begin(), queries.end());
 
@@ -49,7 +48,7 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     auto duration1  = std::chrono::duration_cast<std::chrono::microseconds>(insert_stop1 - insert_start1);
     unsigned long long insert_time1 = duration1.count();
     cout << "Time take to insert " << data.size() << " keys = " << insert_time1 << " microseconds" << endl;
-    
+
     // execute point queries on bptree
     auto query_start1 = std::chrono::high_resolution_clock::now();
     // query from dualbptree
@@ -86,6 +85,7 @@ void testDualTree(std::vector<int> data, std::vector<int> queries, int num_sd){
     auto insert_start = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
+        // cout << "insert key: " << i << endl;
         if (!dualbptree.insert(i,i,num_sd))
             cout << "Failed to insert key " << i << endl;
     }
@@ -94,6 +94,8 @@ void testDualTree(std::vector<int> data, std::vector<int> queries, int num_sd){
     unsigned long long insert_time = duration.count();
     std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << "Time taken to insert " << data.size() << " keys = " << insert_time << " microseconds" << endl;
+
+    // execute point queries on dualbptree
     cout<< "Sorted size is "<< dualbptree.sorted_size << endl;
     cout<< "Unsorted size is "<< dualbptree.unsorted_size << endl;
 

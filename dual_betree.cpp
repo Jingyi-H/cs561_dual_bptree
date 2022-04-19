@@ -13,7 +13,8 @@ DualBeTree<_Key,_Value>::DualBeTree()
     unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 10000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
-    this->last_element = DEFAULT;
+    this->tail_min = DEFAULT;
+    this->tail_max = DEFAULT;
     this->sorted_size = 0;
     this->unsorted_size = 0;
     this->sum = 0;
@@ -24,14 +25,19 @@ DualBeTree<_Key,_Value>::DualBeTree()
 
 template <typename _Key, typename _Value>
 bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
-
+    /** insert element to 
+    * insert in-order elements to sorted bplus tree
+    * out-of-order elements to unsorted bplus tree
+    */
+    bool flag;
     if(sorted_size < 2){
         this->sorted->insert_to_tail_leaf(key, value);
         sorted_size++;
         //update sd
         sum += key;
         ss += (key-(sum/sorted_size))^2;
-        sd = sqrt(ss/(sorted_size-1));        
+        sd = sqrt(ss/(sorted_size-1));
+        this->tail_max = key;
         // cout << "inserted key: "<< key << endl;
 
     }else{ 
@@ -47,16 +53,17 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
             // cout<< "sd: "<<sd<<endl;
             //otherwise, check if it is within sd range
             //if key is out of sd range, insert to unsorted tree
-            if(key < num_sd*sd + this->sorted->getMaximumKey() && key >sorted->getMaximumKey()){
+            if(key < num_sd*sd + this->tail_max && key > this->tail_max){
                 this->sorted->insert_to_tail_leaf(key, value);
                 this->last_element = key;
                 this->sorted_size++;
+                this->tail_max = key;
                 // cout<<"sorted 1: "<<key<<endl;
                 //update sd
             sum += key;
             ss += (key-(sum/sorted_size))^2;
             sd = sqrt(ss/(sorted_size-1)); 
-            }else if (key > this->sorted->getMaximumKey()- num_sd*sd  && key < sorted->getMaximumKey()){
+            }else if (key > this->tail_max - num_sd*sd  && key < this->tail_max){
                 this->sorted->insert_to_tail_first(key, value);
                 this->sorted_size++;
                 // cout<<"sorted 2"<<endl;
@@ -113,4 +120,26 @@ bool DualBeTree<_Key, _Value>::query(_Key key) {
     }
 }
 
+template <typename _Key, typename _Value>
+void DualBeTree<_Key, _Value>::analysis() {
+    cout << "Sorted Tree Size = " << this->sorted_size << endl;
+    cout << "Unsorted Tree Size = " << this->unsorted_size << endl;
+    cout << "-------Test Dual B+ Tree-------" << endl;
+    cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
+    cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
 
+    this->sorted->fanout();
+    cout << "------Statistics of sorted tree------" << endl;
+    cout << "internal splits=" << this->sorted->traits.internal_splits << endl;
+    cout << "num_leaf_nodes=" << this->sorted->traits.num_leaf_nodes << endl;
+    cout << "num_internal_nodes=" << this->sorted->traits.num_internal_nodes << endl;
+    cout << "average fanout=" << this->sorted->traits.average_fanout << endl;
+    
+    this->unsorted->fanout();
+    cout << "------Statistics of unsorted tree------" << endl;
+    cout << "internal splits=" << this->unsorted->traits.internal_splits << endl;
+    cout << "num_leaf_nodes=" << this->unsorted->traits.num_leaf_nodes << endl;
+    cout << "num_internal_nodes=" << this->unsorted->traits.num_internal_nodes << endl;
+    cout << "average fanout=" << this->unsorted->traits.average_fanout << endl;
+
+}
