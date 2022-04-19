@@ -2077,6 +2077,7 @@ public:
         auto start = std::chrono::high_resolution_clock::now();
 #endif
        std::pair<key_type, value_type> element_to_insert[] = {std::pair<key_type, value_type>(key, value)};
+
         int num_to_insert = 1;
         
         // insert to the tail leaf, see if tail is going to split
@@ -2147,7 +2148,7 @@ public:
                     {
                         break;
                     }
-
+                  
                     if (child_parent.isRoot())
                     {
                         // split root
@@ -2173,9 +2174,9 @@ public:
 
                         new_sibling.setParent(new_root->getId());
                         manager->addDirtyNode(new_sibling.getId());
-
                         root = new_root;
                         break;
+
                     }
                     // if flag returned true but child parent is not root
                     // split internal node and check for propagating splits upwards
@@ -2188,7 +2189,6 @@ public:
                 }
             }
         }
-
 #ifdef TIMER
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
