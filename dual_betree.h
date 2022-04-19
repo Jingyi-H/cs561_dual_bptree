@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#define TTYPE int
 #ifndef DUALBETREE_H
 #define DUALBETREE_H
 #include "betree.h"
@@ -7,11 +8,15 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
+    public:
     BeTree<_Key, _Value>* sorted;
     BeTree<_Key, _Value>* unsorted;
     _Key last_element;
     uint sorted_size;
     uint unsorted_size;
+    uint sum;
+    float ss;
+    float sd;
 
 public:
     /**
@@ -26,15 +31,14 @@ public:
     * Param: key, value
     * returns: N/A
     */
-    bool insert(_Key key, _Value value);
+    bool insert(_Key key, _Value value, int num_sd);
 
    /**
      * Purpose: Query a key using the dual bplus tree 
      * Param: Key to be queried  
      * returns: True if element is found, else returns false 
      */
-    bool query(_Key key); // TODO: what is the return type: bool or _Value?
+    bool query(_Key key);
 
- 
 };
 #endif
