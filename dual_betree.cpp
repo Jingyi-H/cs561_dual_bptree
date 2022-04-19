@@ -55,7 +55,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
             //if key is out of sd range, insert to unsorted tree
             if(key < num_sd*sd + this->tail_max && key > this->tail_max){
                 this->sorted->insert_to_tail_leaf(key, value);
-                this->last_element = key;
+                this->tail_max = key;
                 this->sorted_size++;
                 this->tail_max = key;
                 // cout<<"sorted 1: "<<key<<endl;
