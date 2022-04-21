@@ -90,7 +90,8 @@ int main(int argc, char **argv)
     cout << "Time take to insert " << data.size() << " keys = " << insert_time1 << " microseconds" << endl;
 
     // execute point queries on dualbptree
-    std::vector<int> queries = generatePointQueries(data, data.size());
+    // std::vector<int> queries = generatePointQueries(data, data.size());
+    std::vector<int> queries = data;
 
     auto query_start1 = std::chrono::high_resolution_clock::now();
     int yes1 = 0;
@@ -149,7 +150,7 @@ int main(int argc, char **argv)
             yes++;
         }
         else {
-            // std::cout << "Key " << queries[i] << " not found" << endl;
+            std::cout << "Key " << queries[i] << " not found" << endl;
             no++;
         }
     }

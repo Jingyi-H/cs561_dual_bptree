@@ -13,7 +13,8 @@ DualBeTree<_Key,_Value>::DualBeTree()
     unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 10000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
-    this->last_element = DEFAULT;
+    this->tail_max = DEFAULT; // p
+    this->tail_min = DEFAULT;
     this->sorted_size = 0;
     this->unsorted_size = 0;
     
@@ -27,7 +28,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     */
     bool flag;
     // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    if (key >= this->sorted->getMaximumKey()) {
+    if (key >= this->last_element) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
             this->last_element = key;
