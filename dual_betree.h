@@ -42,5 +42,9 @@ public:
     bool query(_Key key);
 
     void analysis();
+
+    bool outlierCheck(_Key key, int num_sd) {
+        return key <= (num_sd * this->sd + this->tail_max);
+    }
 };
 #endif
