@@ -46,5 +46,15 @@ public:
     bool outlierCheck(_Key key, int num_sd) {
         return key <= (num_sd * this->sd + this->tail_max);
     }
+
+    void updateSs(_Key key) {
+        this->sum += key;
+        this->ss += key * key;
+        float new_sd = sqrt((this->sorted_size * this->ss - this->sum * this->sum)/float(this->sorted_size * (this->sorted_size - 1)));
+        if (new_sd > 1) {
+            this->sd = new_sd;
+        }
+        // std::cout << "stdev = " << this->sd << std::endl;
+    }
 };
 #endif
