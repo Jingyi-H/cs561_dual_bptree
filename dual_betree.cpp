@@ -6,7 +6,7 @@
 using namespace std;
 
 template <typename _Key, typename _Value>
-DualBeTree<_Key,_Value>::DualBeTree()
+DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
 {
     // constructor
     sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 10000);
@@ -20,11 +20,14 @@ DualBeTree<_Key,_Value>::DualBeTree()
     this->sum = 0;
     this->ss = 0;
     this->sd = 1;
+    this->fail = 0;
+    this->failThres = _failThres;
+    this->num_sd = _num_sd;
     
 }
 
 template <typename _Key, typename _Value>
-bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
+bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     /** insert element to 
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
@@ -38,23 +41,28 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
             // update maximum key of tail leaf
             this->tail_max = key; 
         }
-        else if (outlierCheck(key, num_sd)) {
+        else if (outlierCheck(key)) {
             // insert to sorted tree
             flag = this->sorted->insert_to_tail_leaf(key, value);
             this->sorted_size++;           
             // update sd
             updateSs(key);
             // update maximum key of tail leaf
-            this->tail_max = key; 
+            this->tail_max = key;
+            this->fail = 0;
         } else {
             flag = this->unsorted->insert(key, value);
+            cout << "outlier check failed: key = " << key << " thres = " << this->sd * this->num_sd + this->sum/this->sorted_size << endl;
             this->unsorted_size++;
+            this->fail++; 
         }
     } else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
         flag = this->sorted->insert_to_tail_first(key, value);
         this->sorted_size++;
         // update sd
         updateSs(key);
+        if (this->num_sd - 1 > 1)
+            this->num_sd--;
     } else {
         flag = this->unsorted->insert(key, value);
         this->unsorted_size++;

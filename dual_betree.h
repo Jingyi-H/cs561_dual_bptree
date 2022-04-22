@@ -16,8 +16,12 @@ class DualBeTree
     uint sorted_size;
     uint unsorted_size;
     uint sum;
+    uint fail;
+    int num_sd;
+    int failThres;
     float ss;
     float sd;
+
 
 public:
     /**
@@ -25,14 +29,14 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree();
+    DualBeTree(int _num_sd, int _failThres);
 
     /**
     * Purpose: insert key value pair to dual bplus tree
     * Param: key, value
     * returns: N/A
     */
-    bool insert(_Key key, _Value value, int num_sd);
+    bool insert(_Key key, _Value value);
 
    /**
      * Purpose: Query a key using the dual bplus tree 
@@ -43,8 +47,11 @@ public:
 
     void analysis();
 
-    bool outlierCheck(_Key key, int num_sd) {
-        return key <= (num_sd * this->sd + this->tail_max);
+    bool outlierCheck(_Key key) {
+        if (this->fail > this->failThres) {
+            this->num_sd = this->num_sd * 2;
+        }
+        return key <= (this->num_sd * this->sd + this->sum / this->sorted_size);
     }
 
     void updateSs(_Key key) {
@@ -54,7 +61,7 @@ public:
         if (new_sd > 1) {
             this->sd = new_sd;
         }
-        // std::cout << "stdev = " << this->sd << std::endl;
+        // std::cout << "key = " << key << " stdev = " << this->sd << std::endl;
     }
 };
 #endif
