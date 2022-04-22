@@ -61,8 +61,6 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         this->sorted_size++;
         // update sd
         updateSs(key);
-        if (this->num_sd - 1 > 1)
-            this->num_sd--;
     } else {
         flag = this->unsorted->insert(key, value);
         this->unsorted_size++;
