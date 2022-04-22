@@ -125,7 +125,7 @@ void testDualTree(std::vector<int> data, std::vector<int> queries, int num_sd){
 
 int main(int argc, char **argv)
 {
-    if (argc < 2)
+    if (argc < 3)
     {
         std::cout << "Usage: ./main <input_file>" << std::endl;
         return 0;
