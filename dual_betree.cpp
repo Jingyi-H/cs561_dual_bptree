@@ -56,7 +56,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
             sum += key;
             ss += (key-(sum/sorted_size))^2;
             sd = sqrt(ss/(sorted_size-1)); 
-            }else if (key < sorted->getMaximumKey() && key > this->sorted->getMaximumKey()- num_sd*sd & ){
+            }else if (key < sorted->getMaximumKey() && key > this->sorted->getMaximumKey()- num_sd*sd ){
                 this->sorted->insert_to_tail_first(key, value);
                 this->sorted_size++;
                 // cout<<"sorted 2"<<endl;
