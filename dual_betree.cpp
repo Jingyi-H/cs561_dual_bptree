@@ -34,7 +34,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     */
     bool flag;
     // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    if (key >= this->sorted->tail_max) {
+    if (key >= this->tail_max) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
             this->tail_max = key;
