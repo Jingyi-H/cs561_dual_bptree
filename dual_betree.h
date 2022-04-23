@@ -48,9 +48,9 @@ public:
     void analysis();
 
     bool outlierCheck(_Key key) {
-        if (this->fail > this->failThres) {
-            this->num_sd = this->num_sd * 2;
-        }
+        // if (this->fail > this->failThres) {
+        //     this->num_sd = this->num_sd * 2;
+        // }
         return key <= (this->num_sd * this->sd + this->sum / this->sorted_size);
     }
 

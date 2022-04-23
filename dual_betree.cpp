@@ -20,9 +20,9 @@ DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
     this->sum = 0;
     this->ss = 0;
     this->sd = 1;
-    this->fail = 0;
-    this->failThres = _failThres;
-    this->num_sd = _num_sd;
+    // this->fail = 0;
+    // this->failThres = _failThres;
+    this->num_sd = 3;
     
 }
 
@@ -49,12 +49,12 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             updateSs(key);
             // update maximum key of tail leaf
             this->tail_max = key;
-            this->fail = 0;
+            // this->fail = 0;
         } else {
             flag = this->unsorted->insert(key, value);
-            cout << "outlier check failed: key = " << key << " thres = " << this->sd * this->num_sd + this->sum/this->sorted_size << endl;
+            // cout << "outlier check failed: key = " << key << " thres = " << this->sd * this->num_sd + this->sum/this->sorted_size << endl;
             this->unsorted_size++;
-            this->fail++; 
+            // this->fail++; 
         }
     } else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
         flag = this->sorted->insert_to_tail_first(key, value);
