@@ -6,7 +6,7 @@
 using namespace std;
 
 template <typename _Key, typename _Value>
-DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
+DualBeTree<_Key,_Value>::DualBeTree()
 {
     // constructor
     sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 10000);
@@ -17,12 +17,6 @@ DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
     this->tail_min = DEFAULT;
     this->sorted_size = 0;
     this->unsorted_size = 0;
-    this->sum = 0;
-    this->ss = 0;
-    this->sd = 1;
-    this->fail = 0;
-    this->failThres = _failThres;
-    this->num_sd = _num_sd;
     
 }
 

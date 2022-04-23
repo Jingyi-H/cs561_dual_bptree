@@ -23,7 +23,7 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree(int _num_sd, int _failThres);
+    DualBeTree();
 
     /**
     * Purpose: insert key value pair to dual bplus tree

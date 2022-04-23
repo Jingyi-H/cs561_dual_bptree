@@ -74,14 +74,14 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     std::cout << "found:" << yes1 << endl;
     std::cout << "notfound:" << no1 << endl;
 
-    tree->fanout();
+    tree.fanout();
     cout << "-------Test Normal B+ Tree-------" << endl;
-    cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
-    cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
+    cout << "insert_time=" << tree.timer.insert_time << endl;
+    cout << "point_query_time=" << tree.timer.point_query_time << endl;
     cout << "------Statistics of B+ tree------" << endl;
-    cout << "num_internal_nodes=" << this->sorted->traits.num_internal_nodes << endl;
-    cout << "depth = " << this->sorted->depth() << endl;
-    cout << "average fanout =" << this->sorted->traits.average_fanout << endl;
+    cout << "num_internal_nodes=" << tree.traits.num_internal_nodes << endl;
+    cout << "depth = " << tree.depth() << endl;
+    cout << "average fanout =" << tree.traits.average_fanout << endl;
 
     // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
 
