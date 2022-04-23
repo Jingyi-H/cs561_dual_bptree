@@ -13,7 +13,7 @@ DualBeTree<_Key,_Value>::DualBeTree()
     unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 10000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
-    this->tail_max = DEFAULT; // p
+    this->tail_max = DEFAULT;
     this->tail_min = DEFAULT;
     this->sorted_size = 0;
     this->unsorted_size = 0;
@@ -28,15 +28,20 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     */
     bool flag;
     // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    if (key >= this->last_element) {
+    if (key >= this->tail_max) {
         flag = this->sorted->insert_to_tail_leaf(key, value);
         if (flag) {
-            this->last_element = key;
+            this->tail_max = key;
             this->sorted_size++;
         }
     }
-    else if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-        flag = this->sorted->insert_to_tail_first(key, value);
+    else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
+        bool to_sorted = this->sorted->insert_to_tail_first(key, value, this->outlier, this->tail_max);
+        // cout << "retrieve outlier = " << this->outlier.first << "current max = " << this->tail_max << endl;
+        bool to_unsorted = this->unsorted->insert(this->outlier.first, this->outlier.second);
+        // replace one key in sorted tree, so sorted_size is unchanged
+        this->unsorted_size++;
+        flag = to_sorted && to_unsorted;
     }
     else {
         flag = this->unsorted->insert(key, value);

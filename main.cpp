@@ -104,7 +104,7 @@ int main(int argc, char **argv)
             yes1++;
         }
         else {
-            std::cout << "Key " << queries[i] << " not found" << endl;
+            // std::cout << "Key " << queries[i] << " not found" << endl;
             no1++;
         }
     }
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
             yes++;
         }
         else {
-            std::cout << "Key " << queries[i] << " not found" << endl;
+            // std::cout << "Key " << queries[i] << " not found" << endl;
             no++;
         }
     }

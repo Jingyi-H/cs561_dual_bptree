@@ -453,7 +453,40 @@ public:
         // return accordingly
         return data->size >= knobs::NUM_DATA_PAIRS;
     }
+    
+    bool insertInLeaf(std::pair<key_type, value_type> element, std::pair<key_type, value_type>& outlier)
+    {
+        // make sure that caller node is a leaf
+        open();
 
+        assert(*is_leaf);
+
+        // set node as dirty
+        manager->addDirtyNode(id);
+
+        // we want to maintain all elements in the leaf in a sorted order
+        // since existing elements will be sorted and the buffer elements will also come
+        // in a sorted order, we can simply merge the two arrays
+        bool is_max = false;
+        int i = 0;
+
+        while (i < data->size)
+        {
+            if (data->data[i] > element) {
+                outlier = data->data[i];
+                data->data[i] = element;
+                // std::cout << "replace outlier = " << outlier.first << " with key = " << data->data[i].first << std::endl;
+                if (i == data->size - 1) {
+                    is_max = true;
+                }
+                break;
+            }
+            i++;
+        }
+
+        // return true when the max element of the node is modified
+        return is_max;
+    }
     bool insertInLeaf(std::pair<key_type, value_type> element)
     {
         open();
@@ -461,21 +494,14 @@ public:
         // set node as dirty
         manager->addDirtyNode(id);
 
-        // if (data->size > 0)
-        //     assert(element >= data->data[data->size - 1]);
+        if (data->size > 0)
+            assert(element >= data->data[data->size - 1]);
 
         data->data[data->size++] = element;
 
         // check if after adding, the leaf  ` has exceeded limit and
         // return accordingly
         return data->size >= knobs::NUM_DATA_PAIRS;
-    }
-
-    /**
-     * Function: sort data in leaf
-     */
-    void sort() {
-        std::sort(std::begin(data->data), std::end(data->data)); //TODO:, compare_pair_kv<key_type, value_type>());
     }
 
     /**
@@ -977,7 +1003,7 @@ public:
         if (*is_leaf)
         {
             // perform binary search
-            bool found = std::binary_search(data->data, data->data + data->size, key, compare_pair_kv<key_type, value_type>()); 
+            bool found = std::binary_search(data->data, data->data + data->size, key, compare_pair_kv<key_type, value_type>());
 
             return found;
         }
@@ -1482,8 +1508,6 @@ public:
     uint head_leaf_id;
     uint tail_leaf_id;
 
-    bool is_tail_sorted;
-
     _Key min_key;
     _Key max_key;
 
@@ -1499,8 +1523,6 @@ public:
 
         head_leaf_id = root_id;
         tail_leaf_id = root_id;
-
-        is_tail_sorted = true;
 
         std::cout << "B Epsilon Tree" << std::endl;
         std::cout << "Number of Upserts = " << knobs::NUM_UPSERTS << std::endl;
@@ -1925,6 +1947,9 @@ public:
     
     bool insert_to_tail_leaf(key_type key, value_type value) 
     {
+#ifdef TIMER
+        auto start = std::chrono::high_resolution_clock::now();
+#endif
         std::pair<key_type, value_type> insert_pair;
         insert_pair.first = key;
         insert_pair.second = value;
@@ -1961,11 +1986,6 @@ public:
             bool split = tail_leaf->insertInLeaf(insert_pair);
 
             if (split) {
-                // see if tail requires to sort
-                if (!is_tail_sorted) {
-                    tail_leaf->sort();
-                    is_tail_sorted = true;
-                }
                 // create a new leaf node to store the split leaf
                 key_type tail_split_key; // = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
                 uint new_tail_id = manager->allocate();
@@ -2074,6 +2094,34 @@ public:
                 
             }
         }
+
+        return true;
+#ifdef TIMER
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+        timer.insert_time += duration.count();
+#endif
+   }
+
+    // template <typename Iterator>
+    bool insert_to_tail_first(key_type key, value_type value, std::pair<key_type, value_type>& outlier, key_type& tail_max) 
+    {
+#ifdef TIMER
+        auto start = std::chrono::high_resolution_clock::now();
+#endif
+        std::pair<key_type, value_type> element_to_insert(key, value);
+
+        bool is_max = tail_leaf->insertInLeaf(element_to_insert, outlier);
+
+        if (is_max) {
+            max_key = key;
+            tail_max = key;
+        }
+#ifdef TIMER
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+        timer.insert_time += duration.count();
+#endif
 
         return true;
     }
