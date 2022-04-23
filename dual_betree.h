@@ -8,6 +8,7 @@
 template <typename _Key, typename _Value>
 class DualBeTree
 {
+    public:
     BeTree<_Key, _Value>* sorted;
     BeTree<_Key, _Value>* unsorted;
     _Key tail_min;
@@ -22,7 +23,7 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree();
+    DualBeTree(int _num_sd, int _failThres);
 
     /**
     * Purpose: insert key value pair to dual bplus tree
@@ -37,6 +38,8 @@ public:
      * returns: True if element is found, else returns false 
      */
     bool query(_Key key);
+
+    void analysis();
 
 };
 #endif
