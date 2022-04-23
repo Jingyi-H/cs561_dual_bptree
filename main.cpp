@@ -123,6 +123,8 @@ void testDualTree(std::vector<int> data, std::vector<int> queries, int num_sd, i
     std::cout << "Time taken to perform " << queries.size() << " point queries = " << point_query_time << " microseconds" << endl;
     std::cout << "found:" << yes << endl;
     std::cout << "notfound:" << no << endl;
+
+    dualbptree.analysis();
 }
 
 int main(int argc, char **argv)
