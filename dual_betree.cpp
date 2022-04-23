@@ -6,7 +6,7 @@
 using namespace std;
 
 template <typename _Key, typename _Value>
-DualBeTree<_Key,_Value>::DualBeTree()
+DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
 {
     // constructor
     sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 10000);
@@ -19,12 +19,15 @@ DualBeTree<_Key,_Value>::DualBeTree()
     this->unsorted_size = 0;
     this->sum = 0;
     this->ss = 0;
-    this->sd = 0;
+    this->sd = 1;
+    this->fail = 0;
+    this->failThres = _failThres;
+    this->num_sd = _num_sd;
     
 }
 
 template <typename _Key, typename _Value>
-bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
+bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     /** insert element to 
     * insert in-order elements to sorted bplus tree
     * out-of-order elements to unsorted bplus tree
@@ -71,16 +74,14 @@ void DualBeTree<_Key, _Value>::analysis() {
 
     this->sorted->fanout();
     cout << "------Statistics of sorted tree------" << endl;
-    cout << "internal splits=" << this->sorted->traits.internal_splits << endl;
-    cout << "num_leaf_nodes=" << this->sorted->traits.num_leaf_nodes << endl;
     cout << "num_internal_nodes=" << this->sorted->traits.num_internal_nodes << endl;
-    cout << "average fanout=" << this->sorted->traits.average_fanout << endl;
+    cout << "depth = " << this->sorted->depth() << endl;
+    cout << "average fanout =" << this->sorted->traits.average_fanout << endl;
     
     this->unsorted->fanout();
     cout << "------Statistics of unsorted tree------" << endl;
-    cout << "internal splits=" << this->unsorted->traits.internal_splits << endl;
-    cout << "num_leaf_nodes=" << this->unsorted->traits.num_leaf_nodes << endl;
     cout << "num_internal_nodes=" << this->unsorted->traits.num_internal_nodes << endl;
+    cout << "depth = " << this->unsorted->depth() << endl;
     cout << "average fanout=" << this->unsorted->traits.average_fanout << endl;
 
 }
