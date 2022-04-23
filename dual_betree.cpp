@@ -30,84 +30,25 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value, int num_sd) {
     * out-of-order elements to unsorted bplus tree
     */
     bool flag;
-    if(sorted_size < 2){
-        this->sorted->insert_to_tail_leaf(key, value);
-        sorted_size++;
-        //update sd
-        sum += key;
-        ss += (key-(sum/sorted_size))^2;
-        sd = sqrt(ss/(sorted_size-1));
-        this->tail_max = key;
-        // cout << "inserted key: "<< key << endl;
-
-    }else{ 
-        // cout<<"tail minimum:"<<sorted->tail_leaf->getDataPairKey(0)<<endl;
-
-        //if key is smaller than tail leaf min key, insert to unordered tree
-        if(key < this->sorted->tail_leaf->getDataPairKey(0)){
-            this->unsorted->insert(key, value);
-            this->unsorted_size++;
-            // cout<<"unsorted 1: "<<key<<endl;
-        }else{ 
-            // cout<<"sorted max: "<<sorted->getMaximumKey()<<endl;
-            // cout<< "sd: "<<sd<<endl;
-            //otherwise, check if it is within sd range
-            //if key is out of sd range, insert to unsorted tree
-            if(key < num_sd*sd + this->tail_max && key > this->tail_max){
-                this->sorted->insert_to_tail_leaf(key, value);
-                this->tail_max = key;
-                this->sorted_size++;
-                this->tail_max = key;
-                // cout<<"sorted 1: "<<key<<endl;
-                //update sd
-            sum += key;
-            ss += (key-(sum/sorted_size))^2;
-            sd = sqrt(ss/(sorted_size-1)); 
-            }else if (key > this->tail_max - num_sd*sd  && key < this->tail_max){
-                this->sorted->insert_to_tail_first(key, value);
-                this->sorted_size++;
-                // cout<<"sorted 2"<<endl;
-                //update sd
-            sum += key;
-            ss += (key-(sum/sorted_size))^2;
-            sd = sqrt(ss/(sorted_size-1)); 
-            }else{
-                this->unsorted->insert(key, value);
-                this->unsorted_size++;
-                // cout<<"unsorted 2"<<endl;
-            }          
-                   
+    // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
+    if (key >= this->sorted->tail_max) {
+        flag = this->sorted->insert_to_tail_leaf(key, value);
+        if (flag) {
+            this->tail_max = key;
+            this->sorted_size++;
         }
-    
     }
-    return true;
-
-
-    
-    
-    // /** insert element to 
-    // * insert in-order elements to sorted bplus tree
-    // * out-of-order elements to unsorted bplus tree
-    // */
-    // bool flag;
-    // // if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    // if (key >= this->sorted->getMaximumKey()) {
-    //     flag = this->sorted->insert_to_tail_leaf(key, value);
-    //     if (flag) {
-    //         this->last_element = key;
-    //         this->sorted_size++;
-    //     }
-    // }
-    // else if (!this->sorted->tail_leaf || key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-    //     flag = this->sorted->insert_to_tail_first(key, value);
-    // }
-    // else {
-    //     flag = this->unsorted->insert(key, value);
-    //     if (flag) {
-    //         this->unsorted_size++;
-    //     }
-    // }
-    // return flag;
+    else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
+        flag = this->sorted->insert_to_tail_first(key, value);
+        this->sorted_size++;
+    }
+    else {
+        flag = this->unsorted->insert(key, value);
+        if (flag) {
+            this->unsorted_size++;
+        }
+    }
+    return flag;
 }
 
 template <typename _Key, typename _Value>
