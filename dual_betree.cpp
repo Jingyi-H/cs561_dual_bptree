@@ -64,9 +64,9 @@ bool DualBeTree<_Key, _Value>::query(_Key key) {
 
 template <typename _Key, typename _Value>
 void DualBeTree<_Key, _Value>::analysis() {
+    cout << "-------Test Dual B+ Tree-------" << endl;
     cout << "Sorted Tree Size = " << this->sorted_size << endl;
     cout << "Unsorted Tree Size = " << this->unsorted_size << endl;
-    cout << "-------Test Dual B+ Tree-------" << endl;
     cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
     cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
 

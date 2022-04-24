@@ -1524,22 +1524,22 @@ public:
         head_leaf_id = root_id;
         tail_leaf_id = root_id;
 
-        std::cout << "B Epsilon Tree" << std::endl;
-        std::cout << "Number of Upserts = " << knobs::NUM_UPSERTS << std::endl;
-        std::cout << "Number of Pivots = " << knobs::NUM_PIVOTS << std::endl;
-        std::cout << "Number of Children = " << knobs::NUM_CHILDREN << std::endl;
-        std::cout << "Number of Data pairs = " << knobs::NUM_DATA_PAIRS << std::endl;
+        // std::cout << "B Epsilon Tree" << std::endl;
+        // std::cout << "Number of Upserts = " << knobs::NUM_UPSERTS << std::endl;
+        // std::cout << "Number of Pivots = " << knobs::NUM_PIVOTS << std::endl;
+        // std::cout << "Number of Children = " << knobs::NUM_CHILDREN << std::endl;
+        // std::cout << "Number of Data pairs = " << knobs::NUM_DATA_PAIRS << std::endl;
 
 #ifdef UNITTEST
 
 #else
-        std::cout << "Block Size = " << knobs::BLOCK_SIZE << std::endl;
-        std::cout << "Data Size = " << knobs::DATA_SIZE << std::endl;
-        std::cout << "Block Size = " << knobs::BLOCK_SIZE << std::endl;
-        std::cout << "Metadata Size = " << knobs::METADATA_SIZE << std::endl;
-        std::cout << "Unit Size = " << knobs::UNIT_SIZE << std::endl;
-        std::cout << "Pivots Size = " << knobs::PIVOT_SIZE << std::endl;
-        std::cout << "Buffer Size = " << knobs::BUFFER_SIZE << std::endl;
+        // std::cout << "Block Size = " << knobs::BLOCK_SIZE << std::endl;
+        // std::cout << "Data Size = " << knobs::DATA_SIZE << std::endl;
+        // std::cout << "Block Size = " << knobs::BLOCK_SIZE << std::endl;
+        // std::cout << "Metadata Size = " << knobs::METADATA_SIZE << std::endl;
+        // std::cout << "Unit Size = " << knobs::UNIT_SIZE << std::endl;
+        // std::cout << "Pivots Size = " << knobs::PIVOT_SIZE << std::endl;
+        // std::cout << "Buffer Size = " << knobs::BUFFER_SIZE << std::endl;
 #endif
     }
 
@@ -2094,13 +2094,12 @@ public:
                 
             }
         }
-
-        return true;
 #ifdef TIMER
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
         timer.insert_time += duration.count();
 #endif
+        return true;
    }
 
     // template <typename Iterator>
@@ -2318,7 +2317,7 @@ public:
         min = root->getPivotsCtr();
         root->fanout(num, total, max, min, arr, internal);
 
-        std::cout << "--------------Internal = " << internal << std::endl;
+        // std::cout << "--------------Internal = " << internal << std::endl;
 
         // here num will return number of internal nodes
         traits.num_leaf_nodes = n - num;

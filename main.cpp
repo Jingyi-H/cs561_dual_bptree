@@ -75,14 +75,15 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     std::cout << "notfound:" << no1 << endl;
 
     tree.fanout();
+#ifdef TIMER
     cout << "-------Test Normal B+ Tree-------" << endl;
     cout << "insert_time=" << tree.timer.insert_time << endl;
     cout << "point_query_time=" << tree.timer.point_query_time << endl;
+#endif
     cout << "------Statistics of B+ tree------" << endl;
     cout << "num_internal_nodes=" << tree.traits.num_internal_nodes << endl;
     cout << "depth = " << tree.depth() << endl;
     cout << "average fanout =" << tree.traits.average_fanout << endl;
-
     // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
 
 }
@@ -104,10 +105,6 @@ void testDualTree(std::vector<int> data, std::vector<int> queries){
     // unsigned long long insert_time = duration.count();
     // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     // cout << "Time taken to insert " << data.size() << " keys = " << insert_time << " microseconds" << endl;
-
-    // execute point queries on dualbptree
-    cout<< "Sorted size is "<< dualbptree.sorted_size << endl;
-    cout<< "Unsorted size is "<< dualbptree.unsorted_size << endl;
 
     // auto query_start = std::chrono::high_resolution_clock::now();
     // query from dualbptree
@@ -160,7 +157,7 @@ int main(int argc, char **argv)
     ifs.read((char *)data.data(), filesize);
     std::vector<int> queries = generatePointQueries(data, data.size());
 
-    testBptree(data, queries);
+    // testBptree(data, queries);
     testDualTree(data, queries);
 
     return 1; 
