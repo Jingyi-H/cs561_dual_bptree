@@ -2061,14 +2061,13 @@ public:
                 
             }
         }
-
-        return true;
 #ifdef TIMER
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
         timer.insert_time += duration.count();
 #endif
-   }
+        return true;
+    }
 
     // template <typename Iterator>
     bool insert_to_tail_first(key_type key, value_type value) 
