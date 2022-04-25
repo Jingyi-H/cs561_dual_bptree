@@ -5,5 +5,6 @@ tree_dat/*
 .vscode/*
 *.txt
 *.dat
+test2.sh
 main
 workloadgenerator
