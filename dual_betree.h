@@ -18,7 +18,7 @@ class DualBeTree
     uint sum;
     uint fail;
     int num_sd;
-    int failThres;
+    // int failThres;
     float ss;
     float sd;
 
@@ -29,7 +29,7 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree(int _num_sd, int _failThres);
+    DualBeTree(int _num_sd);
 
     /**
     * Purpose: insert key value pair to dual bplus tree
@@ -51,17 +51,27 @@ public:
         // if (this->fail > this->failThres) {
         //     this->num_sd = this->num_sd * 2;
         // }
-        return key <= (this->num_sd * this->sd + this->sum / this->sorted_size);
+        // std::cout<< "key = "<<key<<" bound = "<<this->num_sd * this->sd + this->sum / this->sorted_size<<" sd = "<<this->sd<<std::endl;
+        // return key <= (this->num_sd * this->sd + this->sum / this->sorted_size);
+        return key <= tail_max+sd;
+
     }
 
     void updateSs(_Key key) {
-        this->sum += key;
-        this->ss += key * key;
-        float new_sd = sqrt((this->sorted_size * this->ss - this->sum * this->sum)/float(this->sorted_size * (this->sorted_size - 1)));
-        if (new_sd > 1) {
-            this->sd = new_sd;
+        // this->sum += key;
+        // this->ss += key * key;
+        // // float new_sd = sqrt((this->sorted_size * this->ss - this->sum * this->sum)/float(this->sorted_size * (this->sorted_size - 1)));
+        // float new_sd = );
+        // if (new_sd > 1) {
+        //     this->sd = new_sd;
+        // }
+        // // std::cout << "key = " << key << " stdev = " << this->sd << std::endl;
+    
+        sd = (tail_max - tail_min)/sqrt(12);
+        if(sd<1){
+            sd = sqrt(12);
         }
-        // std::cout << "key = " << key << " stdev = " << this->sd << std::endl;
+
     }
 };
 #endif
