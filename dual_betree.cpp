@@ -20,6 +20,7 @@ DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
     this->sum = 0;
     this->ss = 0;
     this->sd = 1;
+    this->tree_min = DEFAULT;
     this->fail = 0;
     this->failThres = _failThres;
     this->num_sd = _num_sd;
@@ -40,6 +41,8 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->sorted_size++;
             // update maximum key of tail leaf
             this->tail_max = key; 
+            this->tree_min = key;
+
         }
         else if (outlierCheck(key)) {
             // insert to sorted tree

@@ -2071,7 +2071,7 @@ public:
     }
 
     // template <typename Iterator>
-    bool insert_to_tail_first(key_type key, value_type value) 
+    bool insert_to_tail_first(key_type key, value_type value,  key_type& tail_min) 
     {
 #ifdef TIMER
         auto start = std::chrono::high_resolution_clock::now();
