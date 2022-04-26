@@ -7,31 +7,29 @@
 # done
 echo ""
 echo "test 0 5"
-# ./main data_10000000-elems_0-kperct_5-lperct_1seed1650756504.dat
-./main data_10000000-elems_0-kperct_5-lperct_1seed1650769546.dat
-./main data_10000000-elems_0-kperct_5-lperct_1seed1650769961.dat
+# ./main createdata_10000000-elems_0-K_500000-L_1234seed1650847988.dat
+# ./main createdata_10000000-elems_0-K_500000-L_1seed1650908753.dat
+./main createdata_10000000-elems_0-K_500000-L_2seed1650917491.dat
 
 echo ""
 echo "test 1 1"
-# ./main data_10000000-elems_1-kperct_1-lperct_1seed1650756519.dat
-./main data_10000000-elems_1-kperct_1-lperct_1seed1650769565.dat
-./main data_10000000-elems_1-kperct_1-lperct_1seed1650769964.dat
+# ./main createdata_10000000-elems_100000-K_100000-L_1234seed1650847955.dat
+# ./main createdata_10000000-elems_100000-K_100000-L_1seed1650908742.dat
+./main createdata_10000000-elems_100000-K_100000-L_2seed1650917505.dat
 
 echo ""
 echo "test 3 3"
-# ./main data_10000000-elems_3-kperct_3-lperct_1seed1650756523.dat
-./main data_10000000-elems_3-kperct_3-lperct_1seed1650769571.dat
-./main data_10000000-elems_3-kperct_3-lperct_1seed1650769969.dat
+# ./main createdata_10000000-elems_300000-K_300000-L_1234seed1650847942.dat
+# ./main createdata_10000000-elems_300000-K_300000-L_1seed1650908731.dat
+./main createdata_10000000-elems_300000-K_300000-L_2seed1650917523.dat
 
 echo ""
 echo "test 5 5"
-# ./main data_10000000-elems_5-kperct_5-lperct_1seed1649432836.dat
-# ./main data_10000000-elems_5-kperct_5-lperct_1seed1650756530.dat
-./main data_10000000-elems_5-kperct_5-lperct_1seed1650769579.dat
-./main data_10000000-elems_5-kperct_5-lperct_1seed1650769973.dat
+# ./main createdata_10000000-elems_500000-K_500000-L_1234seed1650847931.dat
+# ./main createdata_10000000-elems_500000-K_500000-L_1seed1650908722.dat
+./main createdata_10000000-elems_500000-K_500000-L_2seed1650917540.dat
 
 echo ""
 echo "test 50 50"
-# ./main data_10000000-elems_50-kperct_50-lperct_1seed1650756534.dat
-./main data_10000000-elems_50-kperct_50-lperct_1seed1650769583.dat
-./main data_10000000-elems_50-kperct_50-lperct_1seed1650769977.dat
+# ./main createdata_10000000-elems_5000000-K_5000000-L_1seed1650908662.dat
+./main createdata_10000000-elems_5000000-K_5000000-L_2seed1650917469.dat

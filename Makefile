@@ -20,6 +20,6 @@ workloadgenerator: workload_generator.cpp
 clean: 
 	$(RM) *.o
 	rm main
-	rm workloadgenerator
+	rm -rf workloadgenerator
 	$(RM) tree_dat/*
 	rm -r tree_dat/
