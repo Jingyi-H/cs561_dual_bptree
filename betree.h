@@ -1912,7 +1912,7 @@ public:
         return true;
     }
     
-    bool insert_to_tail_leaf(key_type key, value_type value) 
+    bool insert_to_tail_leaf(key_type key, value_type value, key_type& tail_min) 
     {
 #ifdef TIMER
         auto start = std::chrono::high_resolution_clock::now();
@@ -1942,6 +1942,7 @@ public:
 
             min_key = key;
             max_key = key;
+            tail_min = key;
         }
         else
         {
@@ -2058,7 +2059,7 @@ public:
                         manager->addDirtyNode(new_node_id);
                     }
                 }
-                
+                tail_min = tail_leaf->getDataPairKey(0);    
             }
         }
 #ifdef TIMER
@@ -2186,6 +2187,7 @@ public:
                     new_node.setToId(new_node_id);
                     manager->addDirtyNode(new_node_id);
                 }
+                tail_min = tail_leaf->getDataPairKey(0);
             }
         }
 #ifdef TIMER

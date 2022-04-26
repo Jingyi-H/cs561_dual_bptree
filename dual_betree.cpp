@@ -36,14 +36,14 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     if (key > this->tail_max) {
         if (this->tail_max == DEFAULT) {
             // insert to sorted tree
-            flag = this->sorted->insert_to_tail_leaf(key, value);
+            flag = this->sorted->insert_to_tail_leaf(key, value, this->tail_min);
             this->sorted_size++;
             // update maximum key of tail leaf
             this->tail_max = key; 
         }
         else if (outlierCheck(key)) {
             // insert to sorted tree
-            flag = this->sorted->insert_to_tail_leaf(key, value);
+            flag = this->sorted->insert_to_tail_leaf(key, value, this->tail_min);
             this->sorted_size++;           
             // update sd
             updateSs(key);
@@ -56,8 +56,8 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->unsorted_size++;
             this->fail++; 
         }
-    } else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-        flag = this->sorted->insert_to_tail_first(key, value);
+    } else if (key >= this->tail_min) {
+        flag = this->sorted->insert_to_tail_first(key, value, this->tail_min);
         this->sorted_size++;
         // update sd
         updateSs(key);
