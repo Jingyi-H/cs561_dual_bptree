@@ -15,6 +15,7 @@ class DualBeTree
     _Key tail_max;
     uint sorted_size;
     uint unsorted_size;
+    uint tree_min;
     uint sum;
     uint fail;
     int num_sd;

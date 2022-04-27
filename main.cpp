@@ -35,6 +35,7 @@ std::vector<int> generatePointQueries(std::vector<int> data, int n)
 
 void testBptree(std::vector<int> data, std::vector<int> queries){
      // instantiate betree
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
     BeTree<int,int> tree("manager", "./tree_dat", 4096, 10000);
 
@@ -55,7 +56,7 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     int yes1 = 0;
     int no1 = 0;
 
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout<<"TEST NORAMAL B+ TREE QUERY:"<<endl;
     for (int i = 0; i < queries.size(); i++){
         if(tree.query(queries[i])){
@@ -73,6 +74,18 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     std::cout << "Time taken to perform " << queries.size() << " point queries = " << point_query_time1 << " microseconds" << endl;
     std::cout << "found:" << yes1 << endl;
     std::cout << "notfound:" << no1 << endl;
+    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+
+    tree.fanout();
+// #ifdef TIMER
+   cout << "------------------------------Test Normal B+ Tree------------------------------" << endl;
+    cout << "insert_time=" << tree.timer.insert_time << endl;
+    cout << "point_query_time=" << tree.timer.point_query_time << endl;
+// #endif
+    cout << "------Statistics of B+ tree------" << endl;
+    cout << "num_internal_nodes=" << tree.traits.num_internal_nodes << endl;
+    cout << "depth = " << tree.depth() << endl;
+    cout << "average fanout =" << tree.traits.average_fanout << endl;
     std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
 
 }
@@ -152,7 +165,7 @@ int main(int argc, char **argv)
     ifs.read((char *)data.data(), filesize);
     std::vector<int> queries = generatePointQueries(data, data.size());
 
-    // testBptree(data, queries);
+    testBptree(data, queries);
     testDualTree(data, queries, num_sd);
 
     return 1; 

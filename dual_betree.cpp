@@ -15,13 +15,12 @@ DualBeTree<_Key,_Value>::DualBeTree(int _num_sd)
     this->unsorted =  unsorted;
     this->tail_min = DEFAULT;
     this->tail_max = DEFAULT;
+    this->tree_min = DEFAULT;
     this->sorted_size = 0;
     this->unsorted_size = 0;
     this->sum = 0;
     this->ss = 0;
     this->sd = 1;
-    // this->fail = 0;
-    // this->failThres = _failThres;
     this->num_sd = _num_sd;
     
 }
@@ -36,15 +35,14 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
     if (key > this->tail_max) {
         if (this->tail_max == DEFAULT) {
             // insert to sorted tree
-            flag = this->sorted->insert_to_tail_leaf(key, value);
+            flag = this->sorted->insert_to_tail_leaf(key, value, this->tail_min);
             this->sorted_size++;
             // update maximum key of tail leaf
             this->tail_max = key; 
-            this->tail_min = key;
         }
         else if (outlierCheck(key)) {
             // insert to sorted tree
-            flag = this->sorted->insert_to_tail_leaf(key, value);
+            flag = this->sorted->insert_to_tail_leaf(key, value, this->tail_min);
             this->sorted_size++;           
             // update sd
             updateSs(key);
@@ -53,12 +51,11 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             // this->fail = 0;
         } else {
             flag = this->unsorted->insert(key, value);
-            cout << "outlier check failed: key = " << key <<" size = "<<sorted_size<<" mean = "<<sum/sorted_size<<" sd = "<<this->sd<< " bound = " << this->sd * this->num_sd + this->sum/this->sorted_size << endl;
+            // cout << "outlier check failed: key = " << key <<" sorted size = "<<sorted_size <<" sd = "<<this->sd<< " bound = " << this->sd + tail_max << endl;
             this->unsorted_size++;
-            // this->fail++; 
         }
-    } else if (key >= this->sorted->tail_leaf->getDataPairKey(0)) {
-        flag = this->sorted->insert_to_tail_first(key, value);
+    } else if (key >= this->tail_min) {
+        flag = this->sorted->insert_to_tail_first(key, value, this->tail_min);
         this->sorted_size++;
         // update sd
         updateSs(key);
@@ -84,7 +81,7 @@ template <typename _Key, typename _Value>
 void DualBeTree<_Key, _Value>::analysis() {
     cout << "Sorted Tree Size = " << this->sorted_size << endl;
     cout << "Unsorted Tree Size = " << this->unsorted_size << endl;
-    cout << "-------Test Dual B+ Tree-------" << endl;
+    cout << "------------------------------Test Dual B+ Tree------------------------------" << endl;
     cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
     cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
 
