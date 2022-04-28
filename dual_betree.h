@@ -16,6 +16,7 @@ class DualBeTree
     uint sorted_size;
     uint unsorted_size;
     uint sum;
+    uint tree_min;
     uint fail;
     int num_sd;
     int failThres;
@@ -48,20 +49,25 @@ public:
     void analysis();
 
     bool outlierCheck(_Key key) {
-        if (this->fail > this->failThres) {
-            this->num_sd = this->num_sd * 2;
-        }
-        return key <= (this->num_sd * this->sd + this->sum / this->sorted_size);
+        // if (this->fail > this->failThres) {
+        //     this->num_sd = this->num_sd * 2;
+        // }
+
+        return key <= tail_max+sd;
     }
 
     void updateSs(_Key key) {
-        this->sum += key;
-        this->ss += key * key;
-        float new_sd = sqrt((this->sorted_size * this->ss - this->sum * this->sum)/float(this->sorted_size * (this->sorted_size - 1)));
-        if (new_sd > 1) {
-            this->sd = new_sd;
+        // this->sum += key;
+        // this->ss += key * key;
+        // float new_sd = sqrt((this->sorted_size * this->ss - this->sum * this->sum)/float(this->sorted_size * (this->sorted_size - 1)));
+        // if (new_sd > 1) {
+        //     this->sd = new_sd;
+        // }
+        // // std::cout << "key = " << key << " stdev = " << this->sd << std::endl;
+        sd = (tail_max - tree_min)/sqrt(12);
+        if(sd<1){
+            sd = sqrt(12);
         }
-        // std::cout << "key = " << key << " stdev = " << this->sd << std::endl;
     }
 };
 #endif
