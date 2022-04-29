@@ -36,7 +36,7 @@ std::vector<int> generatePointQueries(std::vector<int> data, int n)
 void testBptree(std::vector<int> data, std::vector<int> queries){
      // instantiate betree
     // cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
-    BeTree<int,int> tree("manager", "./tree_dat", 4096, 10000);
+    BeTree<int,int> tree("manager", "./tree_dat", 4096, 50000);
 
     // auto insert_start1 = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
