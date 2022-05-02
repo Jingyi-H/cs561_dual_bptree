@@ -9,8 +9,8 @@ template <typename _Key, typename _Value>
 DualBeTree<_Key,_Value>::DualBeTree(int _num_sd, int _failThres)
 {
     // constructor
-    sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 10000);
-    unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 10000);
+    sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 30000);
+    unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 50000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
     this->tail_min = DEFAULT;
@@ -68,7 +68,7 @@ template <typename _Key, typename _Value>
 void DualBeTree<_Key, _Value>::analysis() {
     cout << "Sorted Tree Size = " << this->sorted_size << endl;
     cout << "Unsorted Tree Size = " << this->unsorted_size << endl;
-    cout << "-------Test Dual B+ Tree-------" << endl;
+    cout << "-------------------------Test Dual B+ Tree-------------------------" << endl;
     cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
     cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
 
