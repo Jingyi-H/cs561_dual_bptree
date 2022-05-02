@@ -9,7 +9,7 @@ template <typename _Key, typename _Value>
 DualBeTree<_Key,_Value>::DualBeTree(int _num_sd)
 {
     // constructor
-    sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 10000);
+    sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 50000);
     unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 50000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
@@ -39,6 +39,10 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->sorted_size++;
             // update maximum key of tail leaf
             this->tail_max = key; 
+            this->tree_min = key;
+            updateSs(key);
+
+            cout << "sorted inserted: " <<key<<endl;
         }
         else if (outlierCheck(key)) {
             // insert to sorted tree
@@ -46,9 +50,13 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             this->sorted_size++;           
             // update sd
             updateSs(key);
+
             // update maximum key of tail leaf
             this->tail_max = key;
             // this->fail = 0;
+
+            cout << "sorted inserted: " <<key<<endl;
+
         } else {
             flag = this->unsorted->insert(key, value);
             // cout << "outlier check failed: key = " << key <<" sorted size = "<<sorted_size <<" sd = "<<this->sd<< " bound = " << this->sd + tail_max << endl;
@@ -58,7 +66,9 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         flag = this->sorted->insert_to_tail_first(key, value, this->tail_min);
         this->sorted_size++;
         // update sd
-        updateSs(key);
+        // updateSs(key);
+        cout << "sorted inserted: " <<key<<endl;
+
     } else {
         flag = this->unsorted->insert(key, value);
         this->unsorted_size++;
