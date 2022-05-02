@@ -37,7 +37,7 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
      // instantiate betree
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
-    BeTree<int,int> tree("manager", "./tree_dat", 4096, 10000);
+    BeTree<int,int> tree("manager", "./tree_dat", 4096, 50000);
 
     auto insert_start1 = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
@@ -165,8 +165,9 @@ int main(int argc, char **argv)
     ifs.read((char *)data.data(), filesize);
     std::vector<int> queries = generatePointQueries(data, data.size());
 
+    //getnumwrites should be 0, print getnumread, if not, increase memory by 10000
     testBptree(data, queries);
-    testDualTree(data, queries, num_sd);
+    // testDualTree(data, queries, num_sd);
 
     return 1; 
 }

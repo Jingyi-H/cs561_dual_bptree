@@ -10,7 +10,7 @@ DualBeTree<_Key,_Value>::DualBeTree(int _num_sd)
 {
     // constructor
     sorted = new BeTree<_Key,_Value>("sortedT", "./tree_dat", 4096, 10000);
-    unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 10000);
+    unsorted= new BeTree<_Key,_Value>("unsortedT", "./tree_dat", 4096, 50000);
     this->sorted = sorted;
     this->unsorted =  unsorted;
     this->tail_min = DEFAULT;
