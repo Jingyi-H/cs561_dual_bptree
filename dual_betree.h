@@ -70,13 +70,14 @@ public:
         sd = (tail_max - tail_min)/sqrt(12);
 
         if(sd<sqrt(12)){
-            // if(tail_max == tail_min && tail_max > sqrt(12) && sorted_size!= 1){
-            //     sd = (tail_max - tree_min)/sqrt(12);
-            // }else{
+            if(tail_max == tail_min && tail_max > sqrt(12) && sorted_size!= 1){
+                sd = (tail_max - tree_min)/sqrt(12);
+            }else{
                 sd = sqrt(12);
-            // }
+                // sd = 1;
+            }
         }
-        std::cout << "key = " << key << " stdev = " << this->sd <<" sorted_size = "<<sorted_size <<" tail_max = "<<tail_max << std::endl;
+        // std::cout << "key = " << key << " stdev = " << this->sd <<" sorted_size = "<<sorted_size <<" tail_max = "<<tail_max << std::endl;
 
     }
 };

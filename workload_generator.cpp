@@ -3,205 +3,154 @@
 #include <algorithm>
 #include <vector>
 #include <iostream>
-#include <unordered_set>
-#include <random>
-#include <iomanip>
-#include <cassert>
+#include <string>
 
+/**
+* Workload generator of zonemap
+*/
 
-typedef unsigned int key_type;
+void generate_one_file(unsigned long long pTOTAL_NUMBERS, unsigned int pdomain, unsigned long long pL, short ppercent_outRange, short plpercentage, int pseed);
+std::string generate_partitions_stream(unsigned long long TOTAL_NUMBERS, unsigned int domain, unsigned long long L, short percent_outRange, short l_percentage, int seed, std::string folder);
 
-
-inline bool ledger_exists();
-void generate_one_file(key_type pTOTAL_NUMBERS, key_type pdomain, key_type windowSize, key_type k, int l, int pseed, std::string type, std::string pathToDirectory);
-std::string generate_partitions_stream(key_type TOTAL_NUMBERS, key_type domain, key_type windowSize, key_type K, int L, int seed, std::string folder, std::string type);
-
-inline bool ledger_exists()
-{
-    std::ifstream f("dataledger.txt");
-    return f.good();
-}
-
-void generate_one_file(key_type pTOTAL_NUMBERS, key_type pdomain, key_type windowSize, key_type k, int l, int pseed, std::string type, std::string pathToDirectory)
+void generate_one_file(unsigned long long pTOTAL_NUMBERS, unsigned int pdomain, unsigned long long pL, short ppercent_outRange, short plpercentage, int pseed = 1)
 {
     std::ofstream outfile;
 
     srand(time(NULL));
     outfile.open("dataledger.txt", std::ios_base::app);
 
-    std::string folder_name = pathToDirectory+"/";
-
-    outfile << generate_partitions_stream(pTOTAL_NUMBERS, pdomain, windowSize, k, l, pseed, folder_name, type) << std::endl;
+    std::string folder_name = "./";
+    outfile << generate_partitions_stream(pTOTAL_NUMBERS, pdomain, pL, ppercent_outRange, plpercentage, pseed, folder_name) << std::endl;
 
     outfile.close();
 }
 
-
-
-key_type generate_random_in_range(key_type position, key_type Total_Numbers, int L)
+unsigned int generate_random_in_range(unsigned long long position, unsigned long long Total_Numbers, double l_percentage)
 {
-    int l = L;
-    int ret;
+    unsigned int l = Total_Numbers * l_percentage;
 
-    uint min_jump = 1;
-    uint max_jump = l;
-
-    // a jump can be only of l windowSizeaces
-    int jump = rand() % (max_jump) + min_jump;
-
-    if (position <= l)
+    if ((int)(position - l) <= 0)
     {
 
-        // we can only jump forward
-        ret = position + jump;
+        return (rand() % (position + l));
     }
-    else if ((key_type)(position + l) >= Total_Numbers)
+    else if ((int)(position + l) >= Total_Numbers)
     {
 
-        // we can only jump backward
-        ret = position - jump;
+        return (rand() % (Total_Numbers - (position - l))) + (position - l);
     }
     else
     {
-    
-        // we can jump forward or backward
-        // let's toss a coin to find out what to do
-        float p = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-        // we move backwards with p < 0.5
-        if (p < 0.5)
-            ret = position - jump;
-        else
-            ret = position + jump;
-    }
-    if (ret < 0)
-    {
-        std::cout << "oops (negative index)" << std::endl;
-    }
 
-    return (key_type)ret;
+        return (rand() % ((position + l) - (position - l))) + (position - l);
+    }
 }
 
-std::string generate_partitions_stream(key_type TOTAL_NUMBERS, key_type domain, key_type windowSize, key_type K, int L, int seed, std::string folder = "./Data", std::string type = "bin")
+/*
+    Function which generates uniform data over some domain, and write it in binary format.
+    Each partition of L elements is shuffled, and has some noise (randomness) linked to the
+    percent_outRange parameter.
+    */
+std::string generate_partitions_stream(unsigned long long TOTAL_NUMBERS, unsigned int domain, unsigned long long L, short percent_outRange, short l_percentage, int seed, std::string folder = "./Data")
 {
-    float p_outOfRange = (double)K / TOTAL_NUMBERS;
+    float p_outOfRange = percent_outRange / 100.0;
 
     std::srand(seed);
 
+    //unsigned long long array[TOTAL_NUMBERS];
+    std::vector<unsigned long long> array(TOTAL_NUMBERS, 0);
 
-    key_type *array = new key_type[TOTAL_NUMBERS];
+    std::string fname = folder;
+    fname += "/data_";
+    fname += std::to_string(TOTAL_NUMBERS);
+    fname += "-elems_";
+    fname += std::to_string(percent_outRange);
+    fname += "-kperct_";
+    fname += std::to_string(l_percentage);
+    fname += "-lperct_";
+    fname += std::to_string(seed);
+    fname += "seed";
+    fname += std::to_string(std::time(nullptr));
+    fname += ".dat";
 
-    std::string f1name = folder;
-    f1name += "/createdata_";
-    f1name += std::to_string(TOTAL_NUMBERS);
-    f1name += "-elems_";
-    f1name += std::to_string(K);
-    f1name += "-K_";
-    f1name += std::to_string(L);
-    f1name += "-L_";
-    f1name += std::to_string(seed);
-    f1name += "seed";
-    f1name += std::to_string(std::time(nullptr));
+    std::ofstream myfile1(fname, std::ios::binary);
 
-    std::ofstream myfile1;
-    
-    if (type.compare("txt") == 0)
+    unsigned long long noise_limit = TOTAL_NUMBERS * p_outOfRange;
+    unsigned long long noise_counter = 0;
+
+    for (unsigned long long i = 0; i < TOTAL_NUMBERS; i++)
     {
-        f1name += ".txt";
-        myfile1.open(f1name);
-    }
+        array[i] = i;
 
-    else
-    {
-        f1name += ".dat";
-        myfile1.open(f1name, std::ios::binary);
-    }
-
-    
-
-    key_type noise_limit = TOTAL_NUMBERS * p_outOfRange;
-    assert(noise_limit == K);
-    key_type noise_counter = 0;
-
-    std::unordered_set<key_type> myset;
-    key_type w = 0;
-    for (key_type i = 0; i < TOTAL_NUMBERS; i++, w += windowSize)
-    {
-        array[i] = w;
-    }
-
-    // loop through the domain and randomly start picking positions
-    for (key_type i = 0; i < TOTAL_NUMBERS; i++)
-    {
         float ran = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
         //randomize generation
         if (ran < p_outOfRange && noise_counter < noise_limit)
         {
             //generate position of shuffle
-            key_type r;
-            while (true)
+            //unsigned long long r = (rand() % TOTAL_NUMBERS);
+            unsigned long long r = generate_random_in_range(i, TOTAL_NUMBERS, l_percentage / 100.0);
+
+            if (array[r] == 0)
             {
-                r = generate_random_in_range(i, TOTAL_NUMBERS, L);
-                if (myset.find(r) != myset.end())
+                if (r != 0)
                 {
-                    continue;
-                }
-                else
-                {
-                    break;
+                    array[r] = r;
                 }
             }
-            myset.insert(r);
 
-            key_type temp = array[i];
+            unsigned long long temp = array[i];
             array[i] = array[r];
             array[r] = temp;
 
             noise_counter++;
-            if (noise_counter == noise_limit)
-                break;
         }
     }
 
-    if (type.compare("txt") == 0)
+    for (unsigned long long j = 0; j < TOTAL_NUMBERS; ++j)
     {
-        for (key_type j = 0; j < TOTAL_NUMBERS; ++j)
-        {
-            myfile1 << array[j] << ",";
-        }
-    }
-    else
-    {
-        for (key_type j = 0; j < TOTAL_NUMBERS; ++j)
-        {
-            myfile1.write(reinterpret_cast<char *>(&array[j]), sizeof(key_type));
-        }
+        myfile1.write(reinterpret_cast<char *>(&array[j]), sizeof(int));
     }
 
     myfile1.close();
-    delete[] array;
-    return f1name;
+
+    return fname;
 }
+
+//arguments to program:
+//unsigned long long pTOTAL_NUMBERS, unsigned int pdomain, unsigned long long pL, short ppercent_outRange, int pseed
 
 int main(int argc, char **argv)
 {
-    if (argc < 7)
+    if (argc < 4)
     {
-        std::cout << "Program requires 7 inputs as parameters. \n Use format: ./workload_generator <totalNumbers> <domain> <kNumber> <lNumber> <seedValue> <typeOfFile> <pathToDirectory>" << std::endl;
+        std::cout << "Usage: ./execs/workload_generator.exe totalNumbers noisePercentage windowThreshold" << std::endl;
         return 0;
     }
 
-    key_type totalNumbers = atoi(argv[1]);
-    key_type domain = atoi(argv[2]);
-    key_type K = atoi(argv[3]);
- 
-    // since we are using rand() function, we only have to take l as an int
-    int L = atoi(argv[4]);
-    int seedValue = atoi(argv[5]);
-    std::string type = argv[6];
-    std::string pathToDirectory = argv[7];
+    unsigned long long totalNumbers = atoi(argv[1]);
+    short noisePercentage = atoi(argv[2]);
+    short lPercentage = atoi(argv[3]);
 
-    // for simplicity lets use window size = 1
-    key_type windowSize = 1; 
+    unsigned long long domain = totalNumbers;
+    unsigned long long windowSize = 1;
+    int seedValue = 3;
 
-    generate_one_file(totalNumbers, domain, windowSize, K, L, seedValue, type, pathToDirectory);
+    // simple checks
+    if (totalNumbers < 0)
+    {
+        std::cout << "No. of Elements cannot be < 0" << std::endl;
+        exit(1);
+    }
+    if (noisePercentage < 0 || noisePercentage > 50)
+    {
+        std::cout << "Please ensure 0 <= noisePercentage <= 50" << std::endl;
+        exit(1);
+    }
+    if (lPercentage < 0 || lPercentage > 50)
+    {
+        std::cout << "Please ensure 0 <= lPercentage <= 50" << std::endl;
+        exit(1);
+    }
+
+    generate_one_file(totalNumbers, domain, windowSize, noisePercentage, lPercentage, seedValue);
 }

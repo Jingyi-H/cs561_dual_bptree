@@ -40,38 +40,49 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
             // update maximum key of tail leaf
             this->tail_max = key; 
             this->tree_min = key;
+            this-> tail_min = key;
             updateSs(key);
 
-            cout << "sorted inserted: " <<key<<endl;
+            // cout << "sorted inserted: " <<key<<endl;
         }
         else if (outlierCheck(key)) {
             // insert to sorted tree
             flag = this->sorted->insert_to_tail_leaf(key, value, this->tail_min);
-            this->sorted_size++;           
+            this->sorted_size++; 
+            // tail_min = this->sorted->tail_leaf->getDataPairKey(0);          
             // update sd
-            updateSs(key);
+            tail_min = this->sorted->tail_leaf->getDataPairKey(0);          
 
             // update maximum key of tail leaf
-            this->tail_max = key;
+            if(tail_max <key ){
+                this->tail_max = key;
+            }
+            updateSs(key);
+
             // this->fail = 0;
 
-            cout << "sorted inserted: " <<key<<endl;
+            // cout << "sorted inserted: " <<key<<endl;
 
         } else {
             flag = this->unsorted->insert(key, value);
             // cout << "outlier check failed: key = " << key <<" sorted size = "<<sorted_size <<" sd = "<<this->sd<< " bound = " << this->sd + tail_max << endl;
             this->unsorted_size++;
+            tail_max++;
         }
     } else if (key >= this->tail_min) {
         flag = this->sorted->insert_to_tail_first(key, value, this->tail_min);
         this->sorted_size++;
+        // tail_max++;
+        tail_min = this->sorted->tail_leaf->getDataPairKey(0);          
+
         // update sd
         // updateSs(key);
-        cout << "sorted inserted: " <<key<<endl;
+        // cout << "sorted inserted: " <<key<<endl;
 
     } else {
         flag = this->unsorted->insert(key, value);
         this->unsorted_size++;
+        tail_max++;
     }
 
     return flag;
