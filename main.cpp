@@ -158,7 +158,7 @@ int main(int argc, char **argv)
     ifs.read((char *)data.data(), filesize);
     std::vector<int> queries = generatePointQueries(data, data.size());
 
-    testBptree(data, queries);
+    // testBptree(data, queries);
     testDualTree(data, queries);
 
     return 1; 
