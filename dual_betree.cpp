@@ -68,19 +68,21 @@ void DualBeTree<_Key, _Value>::analysis() {
     cout << "-------Test Dual B+ Tree-------" << endl;
     cout << "Sorted Tree Size = " << this->sorted_size << endl;
     cout << "Unsorted Tree Size = " << this->unsorted_size << endl;
-    cout << "insert_time=" << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
-    cout << "point_query_time=" << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
+    cout << "insert_time = " << this->sorted->timer.insert_time + this->unsorted->timer.insert_time << endl;
+    cout << "point_query_time = " << this->sorted->timer.point_query_time + this->unsorted->timer.point_query_time << endl;
 
     this->sorted->fanout();
     cout << "------Statistics of sorted tree------" << endl;
-    cout << "num_internal_nodes=" << this->sorted->traits.num_internal_nodes << endl;
+    cout << "num_internal_nodes = " << this->sorted->traits.num_internal_nodes << endl;
     cout << "depth = " << this->sorted->depth() << endl;
     cout << "average fanout =" << this->sorted->traits.average_fanout << endl;
+    cout << "cache miss = " << this->sorted->getNumWrites() << endl;
     
     this->unsorted->fanout();
     cout << "------Statistics of unsorted tree------" << endl;
-    cout << "num_internal_nodes=" << this->unsorted->traits.num_internal_nodes << endl;
+    cout << "num_internal_nodes = " << this->unsorted->traits.num_internal_nodes << endl;
     cout << "depth = " << this->unsorted->depth() << endl;
-    cout << "average fanout=" << this->unsorted->traits.average_fanout << endl;
+    cout << "average fanout = " << this->unsorted->traits.average_fanout << endl;
+    cout << "cache miss = " << this->unsorted->getNumWrites() << endl;
 
 }

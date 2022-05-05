@@ -84,6 +84,7 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     cout << "num_internal_nodes=" << tree.traits.num_internal_nodes << endl;
     cout << "depth = " << tree.depth() << endl;
     cout << "average fanout =" << tree.traits.average_fanout << endl;
+    cout << "cache miss = " << tree.getNumWrites() << endl;
     // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
 
 }
