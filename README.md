@@ -13,7 +13,7 @@ To create workloads, provide the size of workload, a noise percentage in the wor
 ./workloadgenerator <domain_size> <noise_percentage> <windowThreshold>
 
 ## Testing
-After using the compiled main file under the corresponding branch, execute the following command to perform insertion and query test by providing the workload file: 
+After compiling main file under the corresponding branch, execute the following command to perform insertion and query test by providing the workload file name: 
 ./main <input_file> 
 
 ## File Descriptions
@@ -27,7 +27,7 @@ Defines dual B+ tree components. For SD implementation, also defines the outlier
 Defines B+ tree components. Also defines insert_to_tail_leaf and insert_to_tail_first functions for dual B+ tree insertions.
 
 ### main.cpp
-Provides a foundational testing framework expected for this project. Provides insertion test and query test for dual B+ tree implementations and output information regarding tests including run time and tree size. Can also test normal B+ tree by uncommenting line "testBptree(data, queries);" in main function.
+Provides a foundational testing framework expected for this project. Provides insertion test and query test for dual B+ tree implementations and output information regarding tests including run time and tree size. You can also test normal B+ tree insert and query by uncommenting line "testBptree(data, queries);" in main function.
 
 ### workload_generator.cpp
 Generates nearly sorted workloads with certain noise and window threshold level.
