@@ -32,13 +32,18 @@ public:
     */
     bool insert(_Key key, _Value value);
 
-   /**
+    /**
      * Purpose: Query a key using the dual bplus tree 
      * Param: Key to be queried  
      * returns: True if element is found, else returns false 
      */
     bool query(_Key key);
 
+    /**
+     * Purpose: Print statistics of the dual bplus tree
+     * Param: N/A
+     * returns: N/A
+     */
     void analysis();
 
 };

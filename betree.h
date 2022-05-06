@@ -2111,10 +2111,11 @@ public:
         auto start = std::chrono::high_resolution_clock::now();
 #endif
         std::pair<key_type, value_type> element_to_insert(key, value);
-
+        // insert (key, value) pair to tail and get outlier
         bool is_max = tail_leaf->insertInLeaf(element_to_insert, outlier);
 
         if (is_max) {
+            // replaced outlier is current tail_max, modify inserted key as new tail_max
             max_key = key;
             tail_max = key;
         }
@@ -2145,7 +2146,6 @@ public:
         }
 
         // now add to tree
-
         // case 1: tail leaf is null -> meaning tree is empty
         if (tail_leaf == nullptr)
         {
@@ -2205,7 +2205,6 @@ public:
             {
                 // case 3: tree exists and we just need to add the leaf
                 // here we can have two possibilities: add and done, or we need to split internal nodes/root
-
                 key_type split_key = tail_leaf->getDataPairKey(tail_leaf->getDataSize() - 1);
                 uint new_node_id = leaf->getId();
                 leaf->setParent(tail_leaf->getParent());
@@ -2319,7 +2318,7 @@ public:
         min = root->getPivotsCtr();
         root->fanout(num, total, max, min, arr, internal);
 
-        // std::cout << "--------------Internal = " << internal << std::endl;
+        std::cout << "--------------Internal = " << internal << std::endl;
 
         // here num will return number of internal nodes
         traits.num_leaf_nodes = n - num;

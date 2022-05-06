@@ -36,9 +36,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         }
     }
     else if (key > this->tail_min) {
-    // else if (key > this->sorted->tail_leaf->getDataPairKey(0)) {
         bool to_sorted = this->sorted->insert_to_tail_first(key, value, this->outlier, this->tail_max);
-        // cout << "retrieve outlier = " << this->outlier.first << "current max = " << this->tail_max << endl;
         bool to_unsorted = this->unsorted->insert(this->outlier.first, this->outlier.second);
         // replace one key in sorted tree, so sorted_size is unchanged
         this->unsorted_size++;
