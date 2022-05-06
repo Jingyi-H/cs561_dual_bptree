@@ -15,10 +15,10 @@ class DualBeTree
     _Key tail_max;
     uint sorted_size;
     uint unsorted_size;
-    uint tree_min;
     uint sum;
     uint fail;
-    int num_sd;
+    uint tail_scaler;
+    // int num_sd;
     // int failThres;
     float ss;
     float sd;
@@ -30,7 +30,7 @@ public:
      * Param: data (key-value pairs), buffer_size
      * returns: N/A
      */
-    DualBeTree(int _num_sd);
+    DualBeTree();
 
     /**
     * Purpose: insert key value pair to dual bplus tree
@@ -65,20 +65,34 @@ public:
         // float new_sd = );
         // if (new_sd > 1) {
         //     this->sd = new_sd;
-        // }
-    
-        sd = (tail_max - tail_min)/sqrt(12);
+        // }       
+        if(tail_max != tail_min && sorted_size!= 1){
+            // std::cout<<"recalculated"<<std::endl;
+            sd = (tail_max - tail_min)/sqrt(12);
 
-        if(sd<sqrt(12)){
-            if(tail_max == tail_min && tail_max > sqrt(12) && sorted_size!= 1){
-                sd = (tail_max - tree_min)/sqrt(12);
-            }else{
-                sd = sqrt(12);
-                // sd = 1;
-            }
         }
-        // std::cout << "key = " << key << " stdev = " << this->sd <<" sorted_size = "<<sorted_size <<" tail_max = "<<tail_max << std::endl;
-
+        if(sd<sqrt(12)){
+            sd = sqrt(12);
+        }      
+        // std::cout << "key = " << key << " stdev = " << this->sd <<" sorted_size = "<<sorted_size <<" tail_max = "<<tail_max <<" tail_min = "<<tail_min<<std::endl;
     }
+    // void updateSs(_Key key) {
+    //     // this->sum += key;
+    //     // this->ss += key * key;
+    //     // // float new_sd = sqrt((this->sorted_size * this->ss - this->sum * this->sum)/float(this->sorted_size * (this->sorted_size - 1)));
+    //     // float new_sd = );
+    //     // if (new_sd > 1) {
+    //     //     this->sd = new_sd;
+    //     // }       
+    //     if(tail_scaler != tail_min && sorted_size!= 1){
+    //         // std::cout<<"recalculated"<<std::endl;
+    //         sd = (tail_scaler - tail_min)/sqrt(12);
+
+    //     }
+    //     if(sd<sqrt(12)){
+    //         sd = sqrt(12);
+    //     }      
+    //     // std::cout << "key = " << key << " stdev = " << this->sd <<" sorted_size = "<<sorted_size <<" tail_max = "<<tail_max <<" tail_min = "<<tail_min<< " tail_scaler = "<< tail_scaler<<std::endl;
+    // }
 };
 #endif

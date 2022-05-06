@@ -35,36 +35,34 @@ std::vector<int> generatePointQueries(std::vector<int> data, int n)
 
 void testBptree(std::vector<int> data, std::vector<int> queries){
      // instantiate betree
-    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
+    // cout<<"TEST NORAMAL B+ TREE INSERT:"<<endl;
     BeTree<int,int> tree("manager", "./tree_dat", 4096, 50000);
 
     // auto insert_start1 = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
-        // cout << "insert key: " << i<<endl;
         if (!tree.insert(i,i))
-            cout << "Failed to insert key " << i << endl;
+            cout << "B+: Failed to insert key " << i << endl;
     }
     // auto insert_stop1 = std::chrono::high_resolution_clock::now();
     // auto duration1  = std::chrono::duration_cast<std::chrono::microseconds>(insert_stop1 - insert_start1);
     // unsigned long long insert_time1 = duration1.count();
     // cout << "Time take to insert " << data.size() << " keys = " << insert_time1 << " microseconds" << endl;
 
-    // execute point queries on bptree
+    // // execute point queries on bptree
     // auto query_start1 = std::chrono::high_resolution_clock::now();
     // query from dualbptree
     int yes1 = 0;
     int no1 = 0;
 
-    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout<<"TEST NORAMAL B+ TREE QUERY:"<<endl;
+    // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    // cout<<"TEST NORAMAL B+ TREE QUERY:"<<endl;
     for (int i = 0; i < queries.size(); i++){
         if(tree.query(queries[i])){
             yes1++;
         }
         else {
-            std::cout << "Key " << queries[i] << " not found" << endl;
+            // std::cout << "Key " << queries[i] << " not found" << endl;
             no1++;
         }
     }
@@ -75,59 +73,54 @@ void testBptree(std::vector<int> data, std::vector<int> queries){
     // std::cout << "Time taken to perform " << queries.size() << " point queries = " << point_query_time1 << " microseconds" << endl;
     std::cout << "found:" << yes1 << endl;
     std::cout << "notfound:" << no1 << endl;
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
 
-// #ifdef TIMER
-   cout << "------------------------------Test Normal B+ Tree------------------------------" << endl;
+    tree.fanout();
+#ifdef TIMER
+    cout << "-------Test Normal B+ Tree-------" << endl;
     cout << "insert_time=" << tree.timer.insert_time << endl;
     cout << "point_query_time=" << tree.timer.point_query_time << endl;
-// #endif
-    tree.fanout();
-
+#endif
     cout << "------Statistics of B+ tree------" << endl;
     cout << "num_internal_nodes=" << tree.traits.num_internal_nodes << endl;
     cout << "depth = " << tree.depth() << endl;
     cout << "average fanout =" << tree.traits.average_fanout << endl;
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << "cache miss = " << tree.getNumWrites() << endl;
+    // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
 
 }
 
-void testDualTree(std::vector<int> data, std::vector<int> queries, int num_sd){
+void testDualTree(std::vector<int> data, std::vector<int> queries){
    // Instantiate dual bplus tree
-    cout<<"TEST DUAL B+ TREE INSERT:"<<endl;
-    DualBeTree<int,int> dualbptree = DualBeTree<int,int>(num_sd);
+    // cout<<"TEST DUAL B+ TREE INSERT:"<<endl;
+    DualBeTree<int,int> dualbptree = DualBeTree<int,int>();
   
-    // auto insert_start = std::chrono::high_resolution_clock::now();
+    auto insert_start = std::chrono::high_resolution_clock::now();
     // Loop through data and insert each element to dual bplus tree
     for(int i : data){
         // cout << "insert key: " << i << endl;
         if (!dualbptree.insert(i,i))
-            cout << "Failed to insert key " << i << endl;
+            cout << "Dual B+: Failed to insert key " << i << endl;
     }
     // auto insert_stop = std::chrono::high_resolution_clock::now();
     // auto duration  = std::chrono::duration_cast<std::chrono::microseconds>(insert_stop - insert_start);
     // unsigned long long insert_time = duration.count();
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     // cout << "Time taken to insert " << data.size() << " keys = " << insert_time << " microseconds" << endl;
-
-    // execute point queries on dualbptree
-    cout<< "Sorted size is "<< dualbptree.sorted_size << endl;
-    cout<< "Unsorted size is "<< dualbptree.unsorted_size << endl;
 
     // auto query_start = std::chrono::high_resolution_clock::now();
     // query from dualbptree
     int yes = 0;
     int no = 0;
 
-    std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout<<"TEST DUAL B+ TREE QUERY:"<<endl;
+    // std::cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    // cout<<"TEST DUAL B+ TREE QUERY:"<<endl;
 
     for (int i = 0; i < queries.size(); i++){
         if(dualbptree.query(queries[i])){
             yes++;
         }
         else {
-            std::cout << "Key " << queries[i] << " not found" << endl;
+            std::cout << "Dual B+: Key " << queries[i] << " not found" << endl;
             no++;
         }
     }
@@ -151,8 +144,6 @@ int main(int argc, char **argv)
     }
 
     std::string input_file = argv[1];
-    int num_sd = 0;
-    // int failThres = atoi(argv[3]);
 
     // read data generated by workload generator
     std::ifstream ifs;
@@ -167,9 +158,8 @@ int main(int argc, char **argv)
     ifs.read((char *)data.data(), filesize);
     std::vector<int> queries = generatePointQueries(data, data.size());
 
-    //getnumwrites should be 0, print getnumread, if not, increase memory by 10000
-    testBptree(data, queries);
-    testDualTree(data, queries, num_sd);
+    // testBptree(data, queries);
+    testDualTree(data, queries);
 
     return 1; 
 }
