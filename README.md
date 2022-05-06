@@ -2,8 +2,11 @@
 
 ## Compilation
 - switch to the corresponding branch for different dual B+ tree implementations:
+ 
  -- basic branch: basic dual tree
+ 
  -- sx branch: dual tree with outlier detection using standard deviation
+
  --jh-move branch: dual tree with lazy move strategy
 
 - Run the "make" command in the terminal to compile using the Makefile provided. 
