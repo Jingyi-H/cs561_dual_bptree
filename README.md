@@ -13,11 +13,13 @@
 
 ## Generate workloads
 To create workloads, provide the size of workload, a noise percentage in the workload, and the window threshold percentage that defiens the range of the out of order element can be placed from its original location. Execute using the following command:
-./workloadgenerator <domain_size> <noise_percentage> <windowThreshold>
+
+```./workloadgenerator <domain_size> <noise_percentage> <windowThreshold>```
 
 ## Testing
 After compiling main file under the corresponding branch, execute the following command to perform insertion and query test by providing the workload file name: 
-./main <input_file> 
+
+```./main <input_file> ```
 
 ## File Descriptions
 ### dual_betree.cpp
