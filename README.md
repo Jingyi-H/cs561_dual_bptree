@@ -1,7 +1,10 @@
 # CS561 Dual B+ Tree
 
+
+
 ## Compilation
-- switch to the corresponding branch for different dual B+ tree implementations:
+- In Github repository: https://github.com/Jingyi-H/cs561_dual_bptree.git
+- Switch to the corresponding branch for different dual B+ tree implementations:
  
  -- basic branch: basic dual tree
  
