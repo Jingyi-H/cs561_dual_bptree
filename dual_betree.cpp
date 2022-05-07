@@ -41,7 +41,7 @@ bool DualBeTree<_Key, _Value>::insert(_Key key, _Value value) {
         }
     }
     else if (key >= this->tail_min) {
-        flag = this->sorted->insert_to_tail_first(key, value);
+        flag = this->sorted->insert_to_tail_first(key, value, tail_min);
         this->sorted_size++;
     }
     else {

@@ -1942,8 +1942,8 @@ public:
 
             min_key = key;
             max_key = key;
-	    tail_min = key;
-	}
+            tail_min = key;
+        }
         else
         {
             // if tree is not empty, we are only going to add rightwards
@@ -2059,7 +2059,7 @@ public:
                         manager->addDirtyNode(new_node_id);
                     }
                 }
-            tail_min = tail_leaf->getDataPairKey(0);    
+                tail_min = tail_leaf->getDataPairKey(0);  
             }
         }
 
@@ -2068,12 +2068,11 @@ public:
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
         timer.insert_time += duration.count();
 #endif
-    return true;
-
+        return true;
    }
 
     // template <typename Iterator>
-    bool insert_to_tail_first(key_type key, value_type value) 
+    bool insert_to_tail_first(key_type key, value_type value, key_type& tail_min) 
     {
 #ifdef TIMER
         auto start = std::chrono::high_resolution_clock::now();
@@ -2189,6 +2188,7 @@ public:
                     new_node.setToId(new_node_id);
                     manager->addDirtyNode(new_node_id);
                 }
+                tail_min = tail_leaf->getDataPairKey(0);
             }
         }
 #ifdef TIMER
